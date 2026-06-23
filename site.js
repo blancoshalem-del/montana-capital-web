@@ -3,6 +3,10 @@
    Injects nav + footer on every page, wires up the UI.
    ============================================================ */
 (function () {
+  /* Backend API base — en local el mismo servidor sirve la API ('');
+     en producción (Vercel) la API vive en el backend de Render. */
+  const MC_API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? '' : 'https://montana-capital-panel.onrender.com';
   /* Main nav — reduced for lower cognitive load (CRO).
      Secondary pages (Ecosistema, Roadmap, Noticias) live in the footer. */
   const PAGES = [
@@ -219,7 +223,7 @@
       note.classList.remove('err');
       note.textContent = 'Enviando…';
       try {
-        const r = await fetch('/api/quote', {
+        const r = await fetch(MC_API + '/api/quote', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, company: comp, message: msg, type, budget, website, source: 'web' }),
         });
@@ -372,7 +376,7 @@
       messages.push({ role: 'user', content: text });
       typing(true);
       try {
-        const r = await fetch('/api/agent/chat', {
+        const r = await fetch(MC_API + '/api/agent/chat', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages, lead }),
         });
@@ -393,7 +397,7 @@
       if (started) return; started = true;
       typing(true);
       try {
-        const r = await fetch('/api/agent/chat', {
+        const r = await fetch(MC_API + '/api/agent/chat', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: [], lead: {} }),
         });
