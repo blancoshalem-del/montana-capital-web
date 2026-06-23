@@ -1,0 +1,22 @@
+{
+  "name": "montana-capital-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend seguro + back office de Montana Capital SAS",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^9.0.1",
+    "pdfkit": "^0.19.1"
+  }
+}

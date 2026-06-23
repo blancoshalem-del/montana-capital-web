@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "montana",
+      "runtimeExecutable": "/Users/jose/.local/node/bin/node",
+      "runtimeArgs": ["server.js"],
+      "cwd": "/Users/jose/Desktop/montana-capital-web/server",
+      "port": 5050
+    }
+  ]
+}

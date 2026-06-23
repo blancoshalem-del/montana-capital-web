@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Back Office — Montana Capital SAS</title>
+<style>
+  :root{
+    --bg:#04060d;--panel:rgba(255,255,255,.04);--panel2:rgba(255,255,255,.06);
+    --line:rgba(120,160,255,.16);--line2:rgba(120,170,255,.34);
+    --blue:#2a6bff;--cyan:#62d6ff;--gold:#e7c264;--text:#eaf0ff;--muted:#93a0bd;
+    --green:#46d39a;--red:#ff7a85;--amber:#f0c065;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;position:relative;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
+    background:radial-gradient(38% 44% at 22% 26%,rgba(98,214,255,.16),transparent 60%),
+      radial-gradient(42% 48% at 82% 16%,rgba(42,107,255,.18),transparent 62%),
+      radial-gradient(40% 46% at 60% 90%,rgba(231,194,100,.08),transparent 60%);
+    filter:blur(10px);animation:aurora 24s ease-in-out infinite alternate}
+  @keyframes aurora{0%{transform:translate3d(-2%,-2%,0) scale(1.05)}100%{transform:translate3d(3%,2%,0) scale(1.12)}}
+  /* fondo de la pantalla de ingreso (la imagen de la montaña) */
+  body.login-mode{background:#04060d url('/assets/login-bg.png') center/cover no-repeat fixed}
+  body.login-mode::before{inset:0;filter:none;animation:none;
+    background:linear-gradient(180deg,rgba(4,6,13,.45),rgba(4,6,13,.82))}
+  a{color:var(--cyan);text-decoration:none}
+  .hidden{display:none!important}
+  .btn{font:inherit;cursor:pointer;border:1px solid var(--line2);background:var(--panel);
+    color:var(--text);padding:10px 18px;border-radius:30px;transition:.2s}
+  .btn:hover{border-color:var(--gold)}
+  .btn.primary{background:linear-gradient(150deg,#f3d98c,var(--gold));color:#0b0f1c;border:0;font-weight:600}
+  .btn.sm{padding:7px 13px;font-size:.85rem;border-radius:22px}
+
+  /* ---------- LOGIN ---------- */
+  .login{max-width:410px;margin:7vh auto;padding:40px 38px 34px;border:1px solid var(--line);
+    border-radius:22px;background:linear-gradient(180deg,rgba(20,30,54,.66),rgba(8,12,24,.5));
+    backdrop-filter:blur(16px);box-shadow:0 40px 90px -50px rgba(0,0,0,.95),0 0 0 1px rgba(120,170,255,.06);
+    text-align:center}
+  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  .login__logo{width:120px;height:120px;margin:0 auto 6px;object-fit:cover;object-position:50% 24%;border-radius:50%;
+    border:2px solid rgba(120,170,255,.35);box-shadow:0 10px 28px rgba(0,0,0,.5)}
+  .login__brand{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;font-size:1.12rem;margin-top:2px}
+  .login__brand small{display:block;font-size:.54rem;letter-spacing:.34em;color:var(--cyan);margin-top:5px}
+  .login__sep{height:1px;margin:20px auto 22px;width:70%;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+  .login h1{font-size:1.18rem;margin-bottom:4px}
+  .login p{color:var(--muted);font-size:.86rem;margin-bottom:22px}
+  .login .field{text-align:left;margin-bottom:14px}
+  .login .btn.primary{width:100%;margin-top:6px;padding:13px}
+  .login__secure{margin-top:18px;font-size:.72rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:7px}
+  .login__secure svg{width:13px;height:13px;fill:var(--green)}
+  .field label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:6px}
+  .field input,.field textarea,select{width:100%;padding:12px 14px;border-radius:10px;
+    border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--text);font:inherit}
+  .err{color:var(--red);font-size:.85rem;min-height:1.2em;margin-top:4px}
+  .ok{color:var(--green);font-size:.85rem;min-height:1.2em;margin-top:4px}
+
+  /* ---------- APP LAYOUT ---------- */
+  .app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+  .sidebar{display:flex;flex-direction:column;gap:6px;padding:22px 16px;
+    border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(12,18,34,.6),rgba(6,9,18,.5));
+    backdrop-filter:blur(10px);position:sticky;top:0;height:100vh}
+  .sb-brand{display:flex;align-items:center;gap:11px;padding:6px 8px 16px}
+  .sb-logo{width:44px;height:44px;flex:none;border-radius:50%;overflow:hidden;display:block;
+    border:1.5px solid rgba(120,170,255,.4);box-shadow:0 0 0 3px rgba(98,214,255,.08)}
+  .sb-logo img{width:100%;height:100%;object-fit:cover;object-position:50% 26%;display:block}
+  .sb-brand b{font-family:'Space Grotesk',sans-serif;font-size:.92rem;letter-spacing:.08em;line-height:1.1}
+  .sb-brand small{display:block;font-size:.52rem;letter-spacing:.28em;color:var(--gold);margin-top:4px}
+  .sb-nav{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+  .sb-nav a{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;color:var(--muted);
+    font-size:.92rem;font-weight:500;transition:.2s;cursor:pointer;border:1px solid transparent}
+  .sb-nav a .ic{width:18px;text-align:center;opacity:.9}
+  .sb-nav a:hover{background:var(--panel);color:var(--text)}
+  .sb-nav a.active{background:linear-gradient(120deg,rgba(42,107,255,.22),rgba(98,214,255,.08));
+    color:#fff;border-color:var(--line2)}
+  .sb-nav a .pill{margin-left:auto;font-size:.7rem;background:var(--blue);color:#fff;border-radius:20px;padding:1px 8px}
+  .sb-user{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+  .sb-user b{display:block;font-size:.88rem}
+  .sb-user small{display:block;color:var(--muted);font-size:.72rem;margin:2px 0 12px;word-break:break-all}
+
+  .main{padding:30px clamp(20px,4vw,44px)}
+  .main__head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+  .main__head h1{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700}
+  .main__head p{color:var(--muted);font-size:.9rem;margin-top:4px}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:26px}
+  .stat{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--panel);position:relative;overflow:hidden}
+  .stat::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cyan)}
+  .stat.c-total::after{background:linear-gradient(var(--cyan),var(--blue))}
+  .stat.c-nuevo::after{background:var(--cyan)}
+  .stat.c-en_proceso::after{background:var(--amber)}
+  .stat.c-ganado::after{background:var(--green)}
+  .stat.c-descartado::after{background:var(--red)}
+  .stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:1.9rem;line-height:1}
+  .stat span{font-size:.74rem;color:var(--muted);display:block;margin-top:6px}
+
+  /* toolbar */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .toolbar input,.toolbar select{flex:1;min-width:150px}
+
+  /* leads */
+  .lead{border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--panel);margin-bottom:12px;transition:.2s}
+  .lead:hover{border-color:var(--line2)}
+  .lead__head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+  .lead__name{font-weight:600;font-size:1.02rem}
+  .lead__meta{color:var(--muted);font-size:.82rem;margin-top:4px}
+  .lead__msg{margin:12px 0;color:#d6def2;line-height:1.55;white-space:pre-wrap}
+  .badge{font-size:.72rem;padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid transparent;white-space:nowrap}
+  .b-nuevo{background:rgba(98,214,255,.14);color:var(--cyan);border-color:rgba(98,214,255,.3)}
+  .b-en_proceso{background:rgba(240,192,101,.14);color:var(--amber);border-color:rgba(240,192,101,.3)}
+  .b-ganado{background:rgba(70,211,154,.14);color:var(--green);border-color:rgba(70,211,154,.3)}
+  .b-descartado{background:rgba(255,122,133,.12);color:var(--red);border-color:rgba(255,122,133,.3)}
+  .tag{font-size:.7rem;padding:4px 9px;border-radius:6px;background:rgba(98,214,255,.1);border:1px solid var(--line);color:var(--cyan)}
+  /* prioridad (calificación inteligente) */
+  .prio{font-size:.72rem;padding:5px 11px;border-radius:20px;font-weight:700;border:1px solid transparent;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+  .prio .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+  .p-alta{background:rgba(70,211,154,.14);color:var(--green);border-color:rgba(70,211,154,.35)}
+  .p-media{background:rgba(240,192,101,.14);color:var(--amber);border-color:rgba(240,192,101,.35)}
+  .p-baja{background:rgba(147,160,189,.12);color:var(--muted);border-color:rgba(147,160,189,.3)}
+  .p-spam{background:rgba(255,122,133,.12);color:var(--red);border-color:rgba(255,122,133,.3)}
+  .score{font-size:.72rem;color:var(--muted);font-weight:600}
+  .reasons{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:4px}
+  .reasons li{font-size:.82rem;color:#c6d2ec;padding-left:14px;position:relative}
+  .reasons li::before{content:"•";position:absolute;left:0;color:var(--cyan)}
+  .stat.c-alta::after{background:var(--green)}
+  .stat.c-por_validar::after{background:var(--cyan)}
+  /* validación */
+  .valbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+    border:1px solid var(--line);border-radius:14px;padding:14px 18px;background:var(--panel);margin-bottom:18px}
+  .valbar select{max-width:180px}
+  .b-val{font-size:.72rem;padding:5px 11px;border-radius:20px;font-weight:600;white-space:nowrap;
+    background:rgba(70,211,154,.14);color:var(--green);border:1px solid rgba(70,211,154,.35)}
+  .b-cot{font-size:.72rem;padding:5px 11px;border-radius:20px;font-weight:600;white-space:nowrap;
+    background:rgba(231,194,100,.16);color:var(--gold);border:1px solid rgba(231,194,100,.4)}
+  .btn.ok-btn{background:linear-gradient(150deg,#5fe3aa,#2bb37e);color:#04140d;border:0;font-weight:700}
+  .btn.no-btn{border-color:rgba(255,122,133,.4);color:var(--red)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .row select{max-width:170px}
+  .muted{color:var(--muted);font-size:.9rem}
+  .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty .em-ic{font-size:2.4rem;opacity:.5;margin-bottom:10px}
+
+  .card{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--panel);max-width:560px}
+  .card h3{font-family:'Space Grotesk',sans-serif;margin-bottom:14px}
+  .ulist{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .ulist li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+  .ulist .role{font-size:.7rem;padding:3px 10px;border-radius:14px;background:rgba(98,214,255,.12);color:var(--cyan);border:1px solid var(--line)}
+
+  /* gráficas */
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:26px}
+  .chart-card{border:1px solid var(--line);border-radius:16px;padding:18px 18px 8px;background:var(--panel)}
+  .chart-card h4{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.95rem;margin-bottom:12px;color:#dbe4f7}
+  .chart-card canvas{max-height:240px}
+  .chart-card.wide{grid-column:1 / -1}
+
+  /* ficha de cliente (modal) */
+  .lead{cursor:default}
+  .modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:20px;
+    background:rgba(2,4,10,.6);backdrop-filter:blur(4px)}
+  .modal__box{width:min(560px,94vw);max-height:90vh;overflow:auto;position:relative;
+    border:1px solid var(--line2);border-radius:18px;padding:28px;
+    background:linear-gradient(180deg,rgba(18,26,46,.98),rgba(8,12,24,.98));
+    box-shadow:0 40px 90px -40px rgba(0,0,0,.9)}
+  .modal__close{position:absolute;top:14px;right:16px;background:none;border:0;color:var(--muted);font-size:1.4rem;cursor:pointer}
+  .modal__box h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;margin-bottom:4px}
+  .mblock{margin:16px 0}
+  .mblock b{display:block;font-size:.78rem;color:var(--muted);margin-bottom:6px;letter-spacing:.02em}
+  .mblock p{color:#d6def2;line-height:1.55;white-space:pre-wrap}
+  .has-note{font-size:.7rem;color:var(--amber);margin-left:8px}
+
+  @media (max-width:820px){
+    .app{grid-template-columns:1fr}
+    .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center}
+    .sb-nav{flex-direction:row;flex-wrap:wrap;margin:0}
+    .sb-user{margin:0;border:0;padding:0;width:100%;display:flex;align-items:center;gap:12px;justify-content:space-between}
+    .sb-user small{margin:0}
+    .stats{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginView" class="login">
+  <img class="login__logo" src="/assets/logo-mark.png" alt="Montana Capital SAS" />
+  <div class="login__brand">MONTANA CAPITAL SAS<small>FINTECH &amp; BLOCKCHAIN</small></div>
+  <div class="login__sep"></div>
+  <p>Acceso interno · panel de control</p>
+  <div class="field"><label>Correo</label><input id="email" type="email" autocomplete="username" placeholder="tu@correo.com" /></div>
+  <div class="field"><label>Clave</label><input id="password" type="password" autocomplete="current-password" placeholder="••••••••" /></div>
+  <button class="btn primary" id="loginBtn">Entrar al panel</button>
+  <div class="err" id="loginErr"></div>
+  <div class="login__secure">
+    <svg viewBox="0 0 24 24"><path d="M12 1l9 4v6c0 5.25-3.6 9.74-9 11-5.4-1.26-9-5.75-9-11V5l9-4zm0 2.18L5 6.3v4.7c0 4.07 2.7 7.7 7 8.94 4.3-1.24 7-4.87 7-8.94V6.3l-7-3.12z"/></svg>
+    Conexión protegida · sesión cifrada (JWT)
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="appView" class="app hidden">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <span class="sb-logo"><img src="/assets/logo-mark.png" alt="Montana Capital SAS"/></span>
+      <span><b>MONTANA CAPITAL</b><small>BACK OFFICE</small></span>
+    </div>
+    <nav class="sb-nav">
+      <a data-view="dashboard" class="active"><span class="ic">▦</span> Dashboard</a>
+      <a data-view="leads"><span class="ic">✉</span> Solicitudes <span class="pill" id="navCount">0</span></a>
+      <a data-view="validacion"><span class="ic">✓</span> Validación <span class="pill" id="navValidar" style="background:var(--green)">0</span></a>
+      <a data-view="usuarios"><span class="ic">◉</span> Usuarios</a>
+      <a data-view="config"><span class="ic">⚙</span> Configuración</a>
+    </nav>
+    <div class="sb-user">
+      <b id="uName">—</b><small id="uEmail">—</small>
+      <button class="btn sm" id="logoutBtn" style="width:100%">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main__head">
+      <div><h1 id="viewTitle">Dashboard</h1><p id="viewSub">Resumen general de tus solicitudes</p></div>
+      <div class="row" id="headActions"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view">
+      <div class="stats" id="stats"></div>
+      <div class="charts">
+        <div class="chart-card"><h4>Solicitudes por estado</h4><canvas id="chStatus"></canvas></div>
+        <div class="chart-card"><h4>Por prioridad (calificación)</h4><canvas id="chPrio"></canvas></div>
+        <div class="chart-card wide"><h4>Por tipo de proyecto</h4><canvas id="chType"></canvas></div>
+        <div class="chart-card wide"><h4>Solicitudes por mes</h4><canvas id="chMonth"></canvas></div>
+      </div>
+      <h3 style="font-family:'Space Grotesk',sans-serif;margin:8px 0 14px">Últimas solicitudes</h3>
+      <div id="recent"></div>
+    </section>
+
+    <!-- SOLICITUDES -->
+    <section id="view-leads" class="view hidden">
+      <div class="toolbar">
+        <input id="q" placeholder="Buscar por nombre, correo, empresa…" />
+        <select id="status">
+          <option value="todos">Todos los estados</option>
+          <option value="nuevo">Nuevo</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="ganado">Ganado</option>
+          <option value="descartado">Descartado</option>
+        </select>
+        <select id="prio">
+          <option value="todas">Toda prioridad</option>
+          <option value="alta">Prioridad alta</option>
+          <option value="media">Prioridad media</option>
+          <option value="baja">Prioridad baja</option>
+        </select>
+        <select id="sort">
+          <option value="prio">Ordenar: prioridad</option>
+          <option value="fecha">Ordenar: más recientes</option>
+        </select>
+        <button class="btn" id="refresh">Actualizar</button>
+        <button class="btn primary" id="exportBtn">⬇ Excel</button>
+      </div>
+      <div id="list"></div>
+    </section>
+
+    <!-- VALIDACIÓN -->
+    <section id="view-validacion" class="view hidden">
+      <div class="valbar">
+        <p class="muted" style="margin:0">Revisa cada solicitud nueva, confírmala como <b style="color:var(--green)">válida</b> (pasa a <i>en proceso</i>) o descártala. Las solicitudes validadas salen de esta bandeja.</p>
+        <div class="row">
+          <select id="valPrio">
+            <option value="todas">Toda prioridad</option>
+            <option value="alta">Solo alta</option>
+            <option value="media">Solo media</option>
+            <option value="baja">Solo baja</option>
+          </select>
+          <button class="btn sm" id="valRefresh">Actualizar</button>
+        </div>
+      </div>
+      <div id="valList"></div>
+    </section>
+
+    <!-- USUARIOS -->
+    <section id="view-usuarios" class="view hidden">
+      <div class="card" style="max-width:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px">
+          <h3 style="margin:0">Usuarios del panel</h3>
+          <button class="btn primary sm" id="addUserBtn">+ Agregar usuario</button>
+        </div>
+
+        <div id="addUserForm" class="hidden" style="border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px;background:rgba(0,0,0,.18)">
+          <div class="field"><label>Nombre</label><input id="nuName" type="text" placeholder="Nombre de la persona" /></div>
+          <div class="field"><label>Correo</label><input id="nuEmail" type="email" placeholder="correo@ejemplo.com" /></div>
+          <div class="field"><label>Rol</label>
+            <select id="nuRole"><option value="soporte">Soporte</option><option value="admin">Administrador</option></select>
+          </div>
+          <div class="field"><label>Clave (opcional — si la dejas vacía, se genera una automática)</label>
+            <input id="nuPass" type="text" placeholder="Dejar vacío para generar automáticamente" /></div>
+          <div class="row">
+            <button class="btn primary sm" id="createUserBtn">Crear usuario</button>
+            <button class="btn sm" id="cancelUserBtn">Cancelar</button>
+          </div>
+          <div class="ok" id="userMsg"></div>
+        </div>
+
+        <ul class="ulist" id="usersList"></ul>
+      </div>
+    </section>
+
+    <!-- CONFIG -->
+    <section id="view-config" class="view hidden">
+      <div class="card">
+        <h3>Cambiar mi contraseña</h3>
+        <div class="field"><label>Clave actual</label><input id="curPass" type="password" /></div>
+        <div class="field"><label>Nueva clave</label><input id="newPass" type="password" placeholder="mínimo 6 caracteres" /></div>
+        <button class="btn primary" id="changePassBtn">Guardar nueva clave</button>
+        <div class="ok" id="cfgMsg"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ===== FICHA DE CLIENTE (modal) ===== -->
+<div id="leadModal" class="modal hidden">
+  <div class="modal__box">
+    <button class="modal__close" id="modalClose" aria-label="Cerrar">✕</button>
+    <h3 id="mName">—</h3>
+    <p class="muted" id="mMeta"></p>
+    <div class="row" id="mTags" style="margin-top:10px"></div>
+    <div class="mblock" id="mQual" style="border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(0,0,0,.18)">
+      <b>Calificación inteligente</b>
+      <div class="row" id="mPrio" style="margin:4px 0 8px"></div>
+      <ul class="reasons" id="mReasons"></ul>
+    </div>
+    <div class="mblock hidden" id="mQuote"></div>
+    <div class="mblock"><b>Mensaje</b><p id="mMsg"></p></div>
+    <div class="field"><label>Estado</label>
+      <select id="mStatus">
+        <option value="nuevo">Nuevo</option><option value="en_proceso">En proceso</option>
+        <option value="ganado">Ganado</option><option value="descartado">Descartado</option>
+      </select>
+    </div>
+    <div class="field"><label>Notas internas (seguimiento)</label>
+      <textarea id="mNotes" rows="4" placeholder="Escribe aquí tus notas sobre este cliente…"></textarea></div>
+    <div class="row">
+      <button class="btn primary" id="mSave">Guardar cambios</button>
+      <a class="btn" id="mWa" target="_blank">WhatsApp</a>
+      <a class="btn" id="mMail">Responder correo</a>
+    </div>
+    <div class="ok" id="mNote"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const API = location.origin;
+let token = localStorage.getItem('mc_token') || '';
+let me = { email:'', role:'' };
+let allLeads = [];
+let charts = {};
+let curLeadId = null;
+const $ = s => document.querySelector(s);
+const STATUS = { nuevo:'Nuevo', en_proceso:'En proceso', ganado:'Ganado', descartado:'Descartado' };
+const PRIO = { alta:'Alta', media:'Media', baja:'Baja' };
+const esc = s => (s||'').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const PR_RANK = { alta:3, media:2, baja:1 };
+function prioBadge(l){
+  const p = l.spam ? 'spam' : (l.priority||'media');
+  const label = l.spam ? 'Spam' : (PRIO[p]||'Media');
+  const sc = (typeof l.score==='number') ? ` <span class="score">${l.score}</span>` : '';
+  return `<span class="prio p-${p}"><span class="dot"></span>${label}${sc}</span>`;
+}
+
+async function api(path, opts = {}) {
+  const r = await fetch(API + path, { ...opts,
+    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}), ...(opts.headers || {}) } });
+  if (r.status === 401) { logout(); throw new Error('401'); }
+  return r.json();
+}
+function animateLogin(){
+  if(!window.gsap) return;
+  // cada elemento de la entrada va apareciendo, uno tras otro
+  gsap.fromTo('#loginView > *',
+    { opacity:0, x:-60 },
+    { opacity:1, x:0, duration:.6, stagger:.1, ease:'power3.out', overwrite:'auto', clearProps:'opacity,transform' });
+}
+function show(logged){
+  $('#loginView').classList.toggle('hidden', logged);
+  $('#appView').classList.toggle('hidden', !logged);
+  document.body.classList.toggle('login-mode', !logged);
+  if(!logged) animateLogin();
+}
+
+async function login(){
+  $('#loginErr').textContent = '';
+  try{
+    const r = await fetch(API+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:$('#email').value,password:$('#password').value})});
+    const d = await r.json();
+    if(!r.ok){ $('#loginErr').textContent = d.error||'Error'; return; }
+    token = d.token; localStorage.setItem('mc_token', token);
+    me = { email: d.user.email, role: d.user.role };
+    $('#uName').textContent = d.user.name; $('#uEmail').textContent = d.user.email;
+    show(true); load();
+  }catch{ $('#loginErr').textContent = 'No se pudo conectar al servidor.'; }
+}
+function logout(){ token=''; localStorage.removeItem('mc_token'); show(false); }
+
+/* view switching */
+function switchView(v){
+  document.querySelectorAll('.sb-nav a').forEach(a=>a.classList.toggle('active',a.dataset.view===v));
+  document.querySelectorAll('.view').forEach(s=>s.classList.add('hidden'));
+  $('#view-'+v).classList.remove('hidden');
+  const titles = { dashboard:['Dashboard','Resumen general de tus solicitudes'],
+    leads:['Solicitudes','Todas las propuestas y cotizaciones recibidas'],
+    validacion:['Validación','Revisa y valida las solicitudes nuevas'],
+    usuarios:['Usuarios','Quién tiene acceso al panel'],
+    config:['Configuración','Ajustes de tu cuenta'] };
+  $('#viewTitle').textContent = titles[v][0]; $('#viewSub').textContent = titles[v][1];
+  if(v==='leads') load();
+  if(v==='usuarios') loadUsers();
+  if(v==='validacion') loadValidacion();
+}
+
+function leadCard(l){
+  const date = new Date(l.createdAt).toLocaleString('es-CO');
+  const phone = (l.phone||'').replace(/\D/g,'');
+  return `<div class="lead">
+    <div class="lead__head">
+      <div>
+        <div class="lead__name">${esc(l.name)} ${l.company?'· <span class="muted">'+esc(l.company)+'</span>':''}</div>
+        <div class="lead__meta">${esc(l.email)} ${l.phone?'· '+esc(l.phone):''} · ${date}</div>
+      </div>
+      <div class="row" style="gap:8px">${prioBadge(l)}<span class="badge b-${l.status}">${STATUS[l.status]||l.status}</span>${l.source==='cotizador'?'<span class="b-cot">💰 Cotizó</span>':''}${l.accepted?'<span class="b-val">✓ Aceptó asesoría</span>':''}${l.validated?'<span class="b-val">✓ Validado</span>':''}${l.notes?'<span class="has-note">📝 con notas</span>':''}</div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      ${l.type?'<span class="tag">'+esc(l.type)+'</span>':''}
+      ${l.budget?'<span class="tag">'+esc(l.budget)+'</span>':''}
+      <span class="tag">vía ${esc(l.source||'web')}</span>
+      ${l.quoteId?'<span class="tag">'+esc(l.quoteId)+'</span>':''}
+    </div>
+    <div class="lead__msg">${esc(l.message)}</div>
+    <div class="row">
+      <button class="btn sm primary" onclick="openLead(${l.id})">📇 Ver ficha</button>
+      ${l.pdfToken?`<a class="btn sm" href="${API}/api/quote/${l.id}/pdf?t=${l.pdfToken}" target="_blank">📄 Ver cotización</a>`:''}
+      <select data-id="${l.id}" class="st">
+        ${Object.entries(STATUS).map(([v,t])=>`<option value="${v}" ${l.status===v?'selected':''}>${t}</option>`).join('')}
+      </select>
+      <a class="btn sm" href="https://wa.me/57${phone}" target="_blank" ${phone?'':'style="opacity:.4;pointer-events:none"'}>WhatsApp</a>
+      <a class="btn sm" href="mailto:${esc(l.email)}">Responder</a>
+    </div>
+  </div>`;
+}
+const emptyState = t => `<div class="empty"><div class="em-ic">📭</div>${t}</div>`;
+
+async function load(){
+  try{
+    const s = await api('/api/admin/stats');
+    $('#stats').innerHTML = [
+      ['total','Total',s.total],['alta','Alta prioridad',s.alta||0],['por_validar','Por validar',s.por_validar||0],
+      ['en_proceso','En proceso',s.en_proceso],['ganado','Ganados',s.ganado]
+    ].map(([c,l,v])=>`<div class="stat c-${c}"><b>${v}</b><span>${l}</span></div>`).join('');
+    $('#navCount').textContent = s.total;
+    $('#navValidar').textContent = s.por_validar||0;
+    $('#navValidar').style.display = (s.por_validar>0)?'':'none';
+
+    const recent = await api('/api/admin/leads');
+    allLeads = recent.leads;
+    renderCharts(allLeads);
+    // el dashboard muestra primero lo de mayor prioridad
+    const top = [...allLeads].sort((a,b)=>(PR_RANK[b.priority]||2)-(PR_RANK[a.priority]||2)||(b.score||0)-(a.score||0));
+    $('#recent').innerHTML = top.length ? top.slice(0,5).map(leadCard).join('') : emptyState('Aún no hay solicitudes. Cuando alguien cotice desde el sitio, aparecerá aquí.');
+
+    const params = new URLSearchParams({ status:$('#status').value, q:$('#q').value });
+    const d = await api('/api/admin/leads?'+params);
+    let rows = d.leads;
+    const fp = $('#prio').value;
+    if(fp!=='todas') rows = rows.filter(l=>(l.priority||'media')===fp);
+    if($('#sort').value==='prio') rows = [...rows].sort((a,b)=>(PR_RANK[b.priority]||2)-(PR_RANK[a.priority]||2)||(b.score||0)-(a.score||0));
+    $('#list').innerHTML = rows.length ? rows.map(leadCard).join('') : emptyState('No hay solicitudes con ese filtro.');
+  }catch(e){}
+}
+
+/* ---- bandeja de validación ---- */
+function valCard(l){
+  const date = new Date(l.createdAt).toLocaleString('es-CO');
+  const phone=(l.phone||'').replace(/\D/g,'');
+  const reasons=(l.reasons||[]).slice(0,4).map(r=>`<li>${esc(r)}</li>`).join('');
+  return `<div class="lead">
+    <div class="lead__head">
+      <div>
+        <div class="lead__name">${esc(l.name)} ${l.company?'· <span class="muted">'+esc(l.company)+'</span>':''}</div>
+        <div class="lead__meta">${esc(l.email)} ${l.phone?'· '+esc(l.phone):''} · ${date}</div>
+      </div>
+      <div class="row" style="gap:8px">${prioBadge(l)}<span class="badge b-${l.status}">${STATUS[l.status]||l.status}</span></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      ${(l.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')}
+      ${l.type?'<span class="tag">'+esc(l.type)+'</span>':''}${l.budget?'<span class="tag">'+esc(l.budget)+'</span>':''}
+    </div>
+    <div class="lead__msg">${esc(l.message)}</div>
+    ${reasons?`<ul class="reasons" style="margin:0 0 12px">${reasons}</ul>`:''}
+    <div class="row">
+      <button class="btn sm ok-btn" onclick="validateLead(${l.id})">✓ Validar (pasar a en proceso)</button>
+      <button class="btn sm no-btn" onclick="discardLead(${l.id})">✗ Descartar</button>
+      <button class="btn sm" onclick="openLead(${l.id})">📇 Ver ficha</button>
+      <a class="btn sm" href="https://wa.me/57${phone}" target="_blank" ${phone?'':'style="opacity:.4;pointer-events:none"'}>WhatsApp</a>
+    </div>
+  </div>`;
+}
+async function loadValidacion(){
+  try{
+    const d = await api('/api/admin/leads');
+    allLeads = d.leads;
+    let rows = allLeads.filter(l=>!l.validated && l.status!=='descartado' && !l.spam);
+    const fp = $('#valPrio').value;
+    if(fp!=='todas') rows = rows.filter(l=>(l.priority||'media')===fp);
+    rows.sort((a,b)=>(PR_RANK[b.priority]||2)-(PR_RANK[a.priority]||2)||(b.score||0)-(a.score||0));
+    $('#valList').innerHTML = rows.length
+      ? rows.map(valCard).join('')
+      : `<div class="empty"><div class="em-ic">✅</div>¡Todo al día! No hay solicitudes pendientes de validar.</div>`;
+  }catch(e){}
+}
+async function validateLead(id){
+  await api('/api/admin/leads/'+id,{method:'PATCH',body:JSON.stringify({validated:true,status:'en_proceso'})});
+  await loadValidacion(); refreshStats();
+}
+async function discardLead(id){
+  if(!confirm('¿Descartar esta solicitud?')) return;
+  await api('/api/admin/leads/'+id,{method:'PATCH',body:JSON.stringify({status:'descartado'})});
+  await loadValidacion(); refreshStats();
+}
+async function refreshStats(){
+  try{
+    const s = await api('/api/admin/stats');
+    $('#navValidar').textContent = s.por_validar||0;
+    $('#navValidar').style.display = (s.por_validar>0)?'':'none';
+  }catch(e){}
+}
+
+async function loadUsers(){
+  $('#addUserBtn').classList.toggle('hidden', me.role!=='admin');
+  try{
+    const d = await api('/api/admin/users');
+    $('#usersList').innerHTML = d.users.map(u=>{
+      const isSelf = u.email.toLowerCase()===me.email.toLowerCase();
+      const del = (me.role==='admin' && !isSelf)
+        ? `<button class="btn sm del-user" data-email="${esc(u.email)}" style="border-color:rgba(255,122,133,.4);color:var(--red)">Eliminar</button>` : '';
+      return `<li><div><b>${esc(u.name)}</b><div class="muted" style="font-size:.8rem">${esc(u.email)}</div></div>
+        <div class="row"><span class="role">${esc(u.role)}</span>${del}</div></li>`;
+    }).join('');
+  }catch(e){}
+}
+
+async function addUser(){
+  const msg = $('#userMsg'); msg.className='ok'; msg.textContent='';
+  const body = { name:$('#nuName').value, email:$('#nuEmail').value, role:$('#nuRole').value, password:$('#nuPass').value };
+  try{
+    const r = await fetch(API+'/api/admin/users',{method:'POST',
+      headers:{'Content-Type':'application/json',Authorization:'Bearer '+token}, body:JSON.stringify(body)});
+    const d = await r.json();
+    if(!r.ok){ msg.className='err'; msg.textContent=d.error||'Error'; return; }
+    if(d.generatedPassword){ msg.className='ok'; msg.textContent='✓ Usuario creado. Clave generada: '+d.generatedPassword+'  (cópiala y compártela)'; }
+    else { msg.className='ok'; msg.textContent='✓ Usuario creado.'; }
+    $('#nuName').value=''; $('#nuEmail').value=''; $('#nuPass').value=''; $('#nuRole').value='soporte';
+    loadUsers();
+  }catch{ msg.className='err'; msg.textContent='No se pudo conectar.'; }
+}
+
+async function deleteUser(email){
+  if(!confirm('¿Eliminar el usuario '+email+'?')) return;
+  try{
+    const r = await fetch(API+'/api/admin/users/'+encodeURIComponent(email),{method:'DELETE',headers:{Authorization:'Bearer '+token}});
+    const d = await r.json();
+    if(!r.ok){ alert(d.error||'Error'); return; }
+    loadUsers();
+  }catch{ alert('No se pudo conectar.'); }
+}
+
+async function changePass(){
+  $('#cfgMsg').textContent=''; $('#cfgMsg').className='ok';
+  try{
+    const r = await fetch(API+'/api/admin/change-password',{method:'POST',
+      headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
+      body:JSON.stringify({current:$('#curPass').value,next:$('#newPass').value})});
+    const d = await r.json();
+    if(!r.ok){ $('#cfgMsg').className='err'; $('#cfgMsg').textContent=d.error||'Error'; return; }
+    $('#cfgMsg').textContent='✓ Clave actualizada. Úsala la próxima vez que entres.';
+    $('#curPass').value=''; $('#newPass').value='';
+  }catch{ $('#cfgMsg').className='err'; $('#cfgMsg').textContent='No se pudo conectar.'; }
+}
+
+/* ---- gráficas ---- */
+function axes(){ return {
+  x:{ticks:{color:'#93a0bd',font:{size:10}},grid:{display:false}},
+  y:{beginAtZero:true,ticks:{color:'#93a0bd',precision:0},grid:{color:'rgba(120,160,255,.1)'}} }; }
+function renderCharts(leads){
+  if(typeof Chart==='undefined') return;
+  const st={nuevo:0,en_proceso:0,ganado:0,descartado:0};
+  leads.forEach(l=>{ if(st[l.status]!==undefined) st[l.status]++; });
+  const pr={alta:0,media:0,baja:0}; leads.forEach(l=>{ const k=l.priority||'media'; if(pr[k]!==undefined) pr[k]++; });
+  const ty={}; leads.forEach(l=>{ const k=l.type||'Sin especificar'; ty[k]=(ty[k]||0)+1; });
+  const bm={}; leads.forEach(l=>{ const k=new Date(l.createdAt).toLocaleDateString('es-CO',{year:'numeric',month:'short'}); bm[k]=(bm[k]||0)+1; });
+  const mk=(id,cfg)=>{ if(charts[id])charts[id].destroy(); const el=document.getElementById(id); if(el)charts[id]=new Chart(el,cfg); };
+  const leg=on=>({responsive:true,plugins:{legend:{display:on,position:'bottom',labels:{color:'#cfe0ff',font:{size:11},padding:14}}}});
+  mk('chStatus',{type:'doughnut',data:{labels:['Nuevo','En proceso','Ganado','Descartado'],
+    datasets:[{data:[st.nuevo,st.en_proceso,st.ganado,st.descartado],backgroundColor:['#62d6ff','#f0c065','#46d39a','#ff7a85'],borderWidth:0}]},options:leg(true)});
+  mk('chPrio',{type:'doughnut',data:{labels:['Alta','Media','Baja'],
+    datasets:[{data:[pr.alta,pr.media,pr.baja],backgroundColor:['#46d39a','#f0c065','#93a0bd'],borderWidth:0}]},options:leg(true)});
+  mk('chType',{type:'bar',data:{labels:Object.keys(ty),datasets:[{data:Object.values(ty),backgroundColor:'#2a6bff',borderRadius:6}]},options:{...leg(false),scales:axes()}});
+  mk('chMonth',{type:'bar',data:{labels:Object.keys(bm),datasets:[{data:Object.values(bm),backgroundColor:'#62d6ff',borderRadius:6}]},options:{...leg(false),scales:axes()}});
+}
+
+/* ---- exportar a Excel (CSV) ---- */
+async function exportCSV(){
+  try{
+    const params = new URLSearchParams({ status:$('#status').value, q:$('#q').value });
+    const r = await fetch(API+'/api/admin/leads.csv?'+params, { headers:{ Authorization:'Bearer '+token } });
+    if(!r.ok){ alert('No se pudo exportar.'); return; }
+    const blob = await r.blob();
+    const cd = r.headers.get('Content-Disposition')||'';
+    const m = cd.match(/filename="([^"]+)"/);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = m?m[1]:'solicitudes.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }catch{ alert('No se pudo conectar para exportar.'); }
+}
+
+/* ---- ficha de cliente ---- */
+function openLead(id){
+  const l=allLeads.find(x=>x.id===id); if(!l) return;
+  curLeadId=id;
+  $('#mName').textContent=l.name+(l.company?' · '+l.company:'');
+  $('#mMeta').textContent=`${l.email}${l.phone?' · '+l.phone:''} · ${new Date(l.createdAt).toLocaleString('es-CO')}`;
+  const allTags=[...(l.tags||[]),l.type,l.budget,'vía '+(l.source||'web')];
+  $('#mTags').innerHTML=allTags.filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+  $('#mPrio').innerHTML = prioBadge(l) + (typeof l.score==='number'?`<span class="score">Puntaje: ${l.score}/100</span>`:'')
+    + (l.validated?`<span class="b-val">✓ Validado${l.validatedBy?' por '+esc(l.validatedBy):''}</span>`:'');
+  $('#mReasons').innerHTML = (l.reasons&&l.reasons.length)
+    ? l.reasons.map(r=>`<li>${esc(r)}</li>`).join('')
+    : '<li class="muted">Sin detalles de calificación.</li>';
+  const mq=$('#mQuote');
+  if(l.quote && l.quote.items){
+    const money=n=>'$'+Math.round(n).toLocaleString('es-CO');
+    const rows=l.quote.items.map(it=>`<div style="display:flex;justify-content:space-between;gap:10px;font-size:.88rem;padding:3px 0"><span>${esc(it.label)}</span><span style="color:var(--cyan)">${money(it.price)}</span></div>`).join('');
+    mq.innerHTML=`<b>Cotización ${esc(l.quoteId||'')}</b>${rows}
+      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-weight:700">
+        <span>Total estimado</span><span style="color:var(--gold)">${esc(l.quote.rangeText||'')}</span></div>
+      ${l.pdfToken?`<a class="btn sm primary" style="margin-top:12px;display:inline-flex" href="${API}/api/quote/${l.id}/pdf?t=${l.pdfToken}" target="_blank">📄 Ver / descargar PDF</a>`:''}`;
+    mq.classList.remove('hidden');
+  } else { mq.classList.add('hidden'); }
+  $('#mMsg').textContent=l.message;
+  $('#mStatus').value=l.status;
+  $('#mNotes').value=l.notes||'';
+  const phone=(l.phone||'').replace(/\D/g,'');
+  const wa=$('#mWa'); wa.href='https://wa.me/57'+phone; wa.style.opacity=phone?'1':'.4'; wa.style.pointerEvents=phone?'auto':'none';
+  $('#mMail').href='mailto:'+l.email;
+  $('#mNote').textContent='';
+  $('#leadModal').classList.remove('hidden');
+}
+function closeLead(){ $('#leadModal').classList.add('hidden'); curLeadId=null; }
+async function saveLead(){
+  if(curLeadId==null) return;
+  await api('/api/admin/leads/'+curLeadId,{method:'PATCH',body:JSON.stringify({status:$('#mStatus').value,notes:$('#mNotes').value})});
+  $('#mNote').textContent='✓ Guardado';
+  await load();
+  setTimeout(closeLead,600);
+}
+
+/* events */
+document.addEventListener('change', async e=>{
+  if(e.target.classList.contains('st')){
+    await api('/api/admin/leads/'+e.target.dataset.id,{method:'PATCH',body:JSON.stringify({status:e.target.value})});
+    load();
+  }
+});
+document.querySelectorAll('.sb-nav a').forEach(a=>a.onclick=()=>switchView(a.dataset.view));
+$('#addUserBtn').onclick = ()=> $('#addUserForm').classList.toggle('hidden');
+$('#cancelUserBtn').onclick = ()=>{ $('#addUserForm').classList.add('hidden'); $('#userMsg').textContent=''; };
+$('#createUserBtn').onclick = addUser;
+document.addEventListener('click', e=>{ if(e.target.classList.contains('del-user')) deleteUser(e.target.dataset.email); });
+$('#loginBtn').onclick = login;
+$('#password').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+$('#logoutBtn').onclick = logout;
+$('#refresh').onclick = load;
+$('#q').addEventListener('input',()=>{clearTimeout(window._t);window._t=setTimeout(load,300);});
+$('#status').onchange = load;
+$('#prio').onchange = load;
+$('#sort').onchange = load;
+$('#exportBtn').onclick = exportCSV;
+$('#valPrio').onchange = loadValidacion;
+$('#valRefresh').onclick = loadValidacion;
+$('#changePassBtn').onclick = changePass;
+$('#modalClose').onclick = closeLead;
+$('#mSave').onclick = saveLead;
+$('#leadModal').addEventListener('click', e=>{ if(e.target.id==='leadModal') closeLead(); });
+
+/* session */
+if(token){ api('/api/me').then(d=>{ me={email:d.user.sub,role:d.user.role}; $('#uName').textContent=d.user.name||''; $('#uEmail').textContent=d.user.sub; show(true); load(); }).catch(()=>show(false)); }
+else show(false);
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# dependencias
+server/node_modules/
+
+# datos y secretos — NUNCA subir a internet
+server/.env
+server/data.json
+server/data.json.tmp
+CREDENCIALES-PANEL.txt
+
+# sistema
+.DS_Store
+*.log
+
+server/quotes/
+.vercel

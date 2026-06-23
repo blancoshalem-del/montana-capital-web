@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Montana Capital SAS">
+  <defs>
+    <clipPath id="mc-circle"><circle cx="120" cy="118" r="80"/></clipPath>
+    <linearGradient id="mc-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cdeaf2"/>
+      <stop offset="1" stop-color="#a9dbe8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- emblem inner scene -->
+  <g clip-path="url(#mc-circle)">
+    <rect x="40" y="38" width="160" height="160" fill="url(#mc-sky)"/>
+    <!-- back mountain -->
+    <path d="M40 150 L92 92 L120 124 L150 80 L200 150 L200 200 L40 200 Z" fill="#24384a"/>
+    <!-- front mountain -->
+    <path d="M40 168 L86 116 L120 152 L156 104 L200 168 L200 200 L40 200 Z" fill="#1a2a39"/>
+    <!-- snow caps -->
+    <path d="M150 80 L160 92 L153 90 L149 96 L144 90 Z" fill="#eef6fa"/>
+    <path d="M92 92 L100 102 L95 100 L91 106 L87 100 Z" fill="#eef6fa"/>
+  </g>
+
+  <!-- rings -->
+  <circle cx="120" cy="118" r="88" fill="none" stroke="#1f2e3d" stroke-width="6"/>
+  <circle cx="120" cy="118" r="79" fill="none" stroke="#1f2e3d" stroke-width="2.5"/>
+
+  <!-- blockchain network -->
+  <g stroke="#273c50" stroke-width="2.4" fill="none">
+    <path d="M120 44 L120 70 M86 78 L120 70 L154 78"/>
+    <path d="M70 110 L104 126 L86 162 L120 178 L154 162 L138 126 L172 110"/>
+    <path d="M104 126 L138 126"/>
+  </g>
+  <g fill="#ffffff" stroke="#1f2e3d" stroke-width="2.4">
+    <circle cx="120" cy="44" r="8"/>
+    <circle cx="154" cy="78" r="7"/>
+    <circle cx="86" cy="78" r="7"/>
+    <circle cx="172" cy="110" r="7"/>
+    <circle cx="70" cy="110" r="7"/>
+    <circle cx="138" cy="126" r="7"/>
+    <circle cx="104" cy="126" r="7"/>
+    <circle cx="154" cy="162" r="7"/>
+    <circle cx="86" cy="162" r="7"/>
+    <circle cx="120" cy="178" r="8"/>
+  </g>
+</svg>

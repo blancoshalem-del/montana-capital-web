@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cotizador en línea — Montana Capital SAS</title>
+<meta name="description" content="Cotiza tu proyecto en línea con Montana Capital SAS: responde unas preguntas y recibe al instante una cotización en PDF — landing, web, plataformas, agentes de IA y blockchain." />
+<meta name="theme-color" content="#04060d" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .cz{max-width:880px;margin:0 auto;padding:0 22px}
+  .cz__head{text-align:center;margin-bottom:26px}
+  .cz__progress{display:flex;gap:8px;max-width:480px;margin:0 auto 8px}
+  .cz__progress i{height:5px;flex:1;border-radius:6px;background:rgba(120,160,255,.16);transition:.5s var(--ease-spring,cubic-bezier(.32,.72,0,1))}
+  .cz__progress i.on{background:linear-gradient(90deg,var(--blue),var(--cyan));box-shadow:0 0 14px -2px rgba(98,214,255,.6)}
+  .cz__step-lbl{font-family:var(--display);font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan)}
+  .cz__card{border:1px solid var(--line);border-radius:var(--r-xl,28px);padding:clamp(24px,4vw,40px);
+    background:linear-gradient(180deg,rgba(18,28,54,.5),rgba(8,12,24,.32));
+    box-shadow:var(--shadow-float,0 30px 80px -42px rgba(10,20,60,.85)),inset 0 1px 0 rgba(255,255,255,.06)}
+  .cz__q{font-family:var(--display);font-weight:600;font-size:clamp(1.3rem,3vw,1.8rem);letter-spacing:-.01em;margin-bottom:6px}
+  .cz__hint{color:var(--muted);font-size:.95rem;margin-bottom:22px}
+  .cz__sub{font-family:var(--display);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+  .cz__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:620px){.cz__grid{grid-template-columns:1fr}}
+  .opt{text-align:left;cursor:pointer;border:1px solid var(--line);border-radius:var(--r-md,18px);padding:18px;
+    background:rgba(255,255,255,.025);color:var(--text);font:inherit;position:relative;display:flex;flex-direction:column;gap:5px;
+    transition:transform .4s var(--ease-spring,cubic-bezier(.32,.72,0,1)),border-color .3s,background .3s}
+  .opt:hover{transform:translateY(-3px);border-color:var(--line-strong)}
+  .opt.sel{border-color:var(--cyan);background:linear-gradient(180deg,rgba(98,214,255,.12),rgba(98,214,255,.03));box-shadow:0 0 0 1px var(--cyan),0 0 30px -10px rgba(98,214,255,.5)}
+  .opt__t{font-family:var(--display);font-weight:600;font-size:1.02rem;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .opt__d{color:var(--muted);font-size:.86rem;line-height:1.45}
+  .opt__price{color:var(--gold);font-family:var(--display);font-weight:700;font-size:.9rem;white-space:nowrap}
+  .opt__ck{flex:none;width:22px;height:22px;border-radius:7px;border:1px solid var(--line-strong);display:grid;place-items:center;font-size:.8rem;color:#04060d;background:transparent;transition:.2s}
+  .opt.sel .opt__ck{background:linear-gradient(150deg,var(--cyan),var(--blue));border-color:transparent}
+  .opt.sel .opt__ck::after{content:"✓"}
+  .cz__incl{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin:4px 0 4px;padding:18px 20px;border:1px solid var(--line);border-radius:var(--r-md,16px);background:rgba(98,214,255,.05)}
+  @media(max-width:620px){.cz__incl{grid-template-columns:1fr}}
+  .cz__incl li{position:relative;padding-left:22px;color:#dbe4f7;font-size:.9rem;line-height:1.4}
+  .cz__incl li::before{content:"✓";position:absolute;left:0;color:var(--cyan);font-weight:700}
+  .cz__nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:26px}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:620px){.field-row{grid-template-columns:1fr}}
+  .cz .field{position:relative;margin-bottom:14px}
+  .cz .field input,.cz .field textarea{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.28);color:var(--text);font:inherit;transition:.25s;resize:vertical}
+  .cz .field input:focus,.cz .field textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(98,214,255,.16)}
+  .cz .field label{position:static;display:block;font-size:.8rem;color:var(--muted);margin-bottom:7px;pointer-events:auto}
+  .cz__estbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    border:1px solid rgba(98,214,255,.3);border-radius:16px;padding:14px 18px;margin-bottom:22px;
+    background:linear-gradient(120deg,rgba(42,107,255,.16),rgba(98,214,255,.05))}
+  .cz__estbar small{color:var(--muted);font-size:.78rem;display:block}
+  .cz__estbar b{font-family:var(--display);font-size:1.3rem;background:linear-gradient(120deg,#fff,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .rz__amount{font-family:var(--display);font-weight:700;line-height:1.05;font-size:clamp(1.7rem,5.4vw,3rem);
+    background:linear-gradient(120deg,#fff,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center}
+  .rz__sub{text-align:center;color:var(--muted);margin:6px 0 22px}
+  .rz__note{color:var(--muted);font-size:.85rem;text-align:center;margin:18px 0 22px}
+  .rz__cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .rz__addons{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:14px}
+  .rz__addons .row{display:flex;justify-content:space-between;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);font-size:.92rem}
+  .rz__addons .row:last-child{border-bottom:0}
+  .rz__addons .row span:last-child{color:var(--cyan);font-family:var(--display)}
+  .cz__done{text-align:center;padding:18px}
+  .cz__done .big{font-size:2.6rem}
+  .cz-err{color:var(--red,#ff7a85);font-size:.88rem;margin-top:10px;min-height:1.1em}
+  .cz-spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:8px}
+</style>
+</head>
+<body class="inner-page" data-page="cotizador">
+
+<section class="page-hero">
+  <canvas class="ambient" aria-hidden="true"></canvas>
+  <div class="page-hero__inner">
+    <p class="crumbs"><a href="index.html">Inicio</a> / Cotizador</p>
+    <span class="kicker">Cotizador en línea</span>
+    <h1>Tu cotización,<br/><em>en 1 minuto.</em></h1>
+    <p>Responde unas preguntas y recibe al instante una cotización clara en PDF —
+       con la opción de agendar tu asesoría sin compromiso.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="cz">
+    <div class="cz__head">
+      <div class="cz__progress" id="czProgress"></div>
+      <span class="cz__step-lbl" id="czStepLbl"></span>
+    </div>
+    <div class="cz__card" id="czCard"></div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="site.js" defer></script>
+<script>
+(function () {
+  const API = location.origin;
+  const $ = s => document.querySelector(s);
+  const card = $('#czCard'), prog = $('#czProgress'), stepLbl = $('#czStepLbl');
+  const esc = s => (s || '').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+  const money = n => '$' + Math.round(n).toLocaleString('es-CO');
+
+  let CFG = null;
+  const state = { type:null, variant:null, features:new Set(), addons:new Set(), blockchain:new Set(),
+                  observations:'', client:{ name:'', email:'', phone:'', company:'', city:'' }, result:null };
+  const STEPS = ['tipo', 'detalles', 'datos', 'resultado'];
+  let step = 0;
+
+  const hasVariants = t => CFG.variants && CFG.variants[t] && CFG.variants[t].length;
+
+  function setProgress() {
+    prog.innerHTML = STEPS.map((_, i) => `<i class="${i <= step ? 'on' : ''}"></i>`).join('');
+    stepLbl.textContent = step < STEPS.length ? `Paso ${step + 1} de ${STEPS.length}` : '';
+  }
+  function anim() { if (window.gsap) gsap.fromTo(card, { opacity:0, y:18 }, { opacity:1, y:0, duration:.5, ease:'power3.out' }); }
+  function go(n) { step = n; render(); anim(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+  async function estimate() {
+    try {
+      const r = await fetch(API + '/api/quote/estimate', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(selections()) });
+      return await r.json();
+    } catch { return null; }
+  }
+  function selections() {
+    return { type: state.type, variant: state.variant, features: [...state.features],
+             addons: [...state.addons], blockchainKinds: [...state.blockchain], observations: state.observations };
+  }
+
+  function render() {
+    setProgress();
+    ({ tipo:renderTipo, detalles:renderDetalles, datos:renderDatos, resultado:renderResultado }[STEPS[step]])();
+  }
+  function navHTML(backOk, nextLbl, nextOk) {
+    return `<div class="cz__nav">
+      <button class="btn btn--ghost" id="czBack" ${backOk ? '' : 'style="visibility:hidden"'}>← Atrás</button>
+      <button class="btn btn--gold" id="czNext" ${nextOk ? '' : 'disabled style="opacity:.5;pointer-events:none"'}>${nextLbl}<i class="arrow"></i></button>
+    </div>`;
+  }
+  function wireNav(onNext) {
+    const b = $('#czBack'), n = $('#czNext');
+    if (b) b.onclick = () => go(step - 1);
+    if (n) n.onclick = onNext;
+  }
+
+  /* PASO 1 — tipo */
+  function renderTipo() {
+    card.innerHTML = `<h2 class="cz__q">¿Qué quieres construir?</h2>
+      <p class="cz__hint">Elige el tipo de proyecto. En el siguiente paso lo afinamos contigo.</p>
+      <div class="cz__grid">${CFG.packages.map(t => `
+        <button class="opt ${state.type === t.id ? 'sel' : ''}" data-id="${t.id}">
+          <span class="opt__t">${esc(t.label)}</span><span class="opt__d">${esc(t.desc)}</span>
+        </button>`).join('')}</div>
+      ${navHTML(false, 'Siguiente', !!state.type)}`;
+    card.querySelectorAll('.opt').forEach(o => o.onclick = () => {
+      state.type = o.dataset.id; state.variant = null; state.features.clear(); state.addons.clear(); state.blockchain.clear();
+      render();
+    });
+    wireNav(() => go(step + 1));
+  }
+
+  /* PASO 2 — detalles (variante + lo que incluye + features + extras / blockchain) */
+  function renderDetalles() {
+    const t = state.type;
+    let html = '';
+
+    if (hasVariants(t)) {
+      const lbl = t === 'ia' ? '¿Qué nivel de agente necesitas?' : t === 'empresarial' ? '¿Qué tan compleja es tu plataforma?' : 'Elige la modalidad';
+      html += `<p class="cz__sub">${lbl}</p><div class="cz__grid">${CFG.variants[t].map(v => `
+        <button class="opt ${state.variant === v.id ? 'sel' : ''}" data-k="variant" data-id="${v.id}">
+          <span class="opt__t">${esc(v.label)}</span><span class="opt__d">${esc(v.desc)}</span>
+        </button>`).join('')}</div>`;
+    }
+
+    // qué incluye (preview)
+    const ik = includesKey(t, state.variant);
+    if (CFG.includes[ik]) {
+      html += `<p class="cz__sub">Esto incluye</p><ul class="cz__incl">${CFG.includes[ik].map(i => `<li>${esc(i)}</li>`).join('')}</ul>`;
+    }
+
+    // features (web)
+    if (CFG.features[t] && CFG.features[t].length) {
+      html += `<p class="cz__sub">¿Qué quieres que tenga? (opcional)</p><div class="cz__grid">${CFG.features[t].map(f => `
+        <button class="opt ${state.features.has(f.id) ? 'sel' : ''}" data-k="feature" data-id="${f.id}">
+          <span class="opt__t">${esc(f.label)}<span class="opt__ck"></span></span>
+        </button>`).join('')}</div>`;
+    }
+
+    // blockchain kinds
+    if (t === 'blockchain') {
+      html += `<p class="cz__sub">¿Qué tipo de proyecto Web3? (opcional)</p><div class="cz__grid">${CFG.blockchainKinds.map(k => `
+        <button class="opt ${state.blockchain.has(k.id) ? 'sel' : ''}" data-k="bk" data-id="${k.id}">
+          <span class="opt__t">${esc(k.label)}<span class="opt__ck"></span></span>
+        </button>`).join('')}</div>`;
+    }
+
+    // extras con precio
+    if (CFG.addons[t] && CFG.addons[t].length) {
+      html += `<p class="cz__sub">Extras opcionales</p><div class="cz__grid">${CFG.addons[t].map(a => `
+        <button class="opt ${state.addons.has(a.id) ? 'sel' : ''}" data-k="addon" data-id="${a.id}">
+          <span class="opt__t">${esc(a.label)}<span class="opt__price">+${money(a.price)}</span></span>
+        </button>`).join('')}</div>`;
+    }
+
+    const nextOk = !hasVariants(t) || !!state.variant;
+    card.innerHTML = `<h2 class="cz__q">Afinemos tu ${esc(packageLabel(t))}</h2>
+      <p class="cz__hint">Marca lo que necesitas. Si tienes dudas, déjalo así y lo vemos en la asesoría.</p>
+      ${html}${navHTML(true, 'Siguiente', nextOk)}`;
+
+    card.querySelectorAll('.opt').forEach(o => o.onclick = () => {
+      const k = o.dataset.k, id = o.dataset.id;
+      if (k === 'variant') { state.variant = id; render(); return; }
+      if (k === 'feature') { state.features.has(id) ? state.features.delete(id) : state.features.add(id); o.classList.toggle('sel'); }
+      if (k === 'bk') { state.blockchain.has(id) ? state.blockchain.delete(id) : state.blockchain.add(id); o.classList.toggle('sel'); }
+      if (k === 'addon') { state.addons.has(id) ? state.addons.delete(id) : state.addons.add(id); o.classList.toggle('sel'); }
+    });
+    wireNav(() => { if (nextOk) go(step + 1); });
+  }
+
+  /* PASO 3 — datos + observaciones */
+  function renderDatos() {
+    card.innerHTML = `<h2 class="cz__q">¿A nombre de quién?</h2>
+      <p class="cz__hint">Con estos datos generamos tu cotización en PDF y te contactamos si lo deseas.</p>
+      <div class="cz__estbar"><div><small>Estimado preliminar</small><b id="czEstVal">calculando…</b></div>
+        <small style="max-width:240px">El detalle completo aparece al generar tu cotización.</small></div>
+      <div class="field-row">
+        <div class="field"><label>Nombre completo *</label><input id="fName" value="${esc(state.client.name)}" placeholder="Tu nombre" autocomplete="name"/></div>
+        <div class="field"><label>Correo *</label><input id="fEmail" type="email" value="${esc(state.client.email)}" placeholder="tu@correo.com" autocomplete="email"/></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>WhatsApp / Teléfono</label><input id="fPhone" value="${esc(state.client.phone)}" placeholder="300 000 0000" autocomplete="tel"/></div>
+        <div class="field"><label>Empresa (opcional)</label><input id="fCompany" value="${esc(state.client.company)}" placeholder="Tu empresa" autocomplete="organization"/></div>
+      </div>
+      <div class="field"><label>Ciudad (opcional)</label><input id="fCity" value="${esc(state.client.city)}" placeholder="Cali, Colombia"/></div>
+      <div class="field"><label>¿Cómo imaginas tu proyecto? (observaciones, opcional)</label>
+        <textarea id="fObs" rows="4" placeholder="Cuéntanos lo que tienes en mente: estilo, referencias, funciones especiales, etc.">${esc(state.observations)}</textarea></div>
+      <input type="text" id="fWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;width:1px;height:1px"/>
+      <div class="cz-err" id="czErr"></div>
+      ${navHTML(true, 'Generar mi cotización', true)}`;
+    estimate().then(q => { const el = $('#czEstVal'); if (el && q) el.textContent = q.rangeText; });
+    wireNav(submit);
+  }
+
+  async function submit() {
+    const g = id => ($('#' + id)?.value || '').trim();
+    state.client = { name:g('fName'), email:g('fEmail'), phone:g('fPhone'), company:g('fCompany'), city:g('fCity') };
+    state.observations = g('fObs');
+    const err = $('#czErr');
+    if (!state.client.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.client.email)) {
+      err.textContent = 'Por favor completa tu nombre y un correo válido.'; return;
+    }
+    const n = $('#czNext'); n.innerHTML = '<span class="cz-spin"></span>Generando…'; n.style.pointerEvents = 'none';
+    try {
+      const r = await fetch(API + '/api/quote/submit', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ selections: { ...selections(), observations: state.observations },
+          client: { ...state.client, observations: state.observations }, website: g('fWebsite') }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'error');
+      state.result = d; go(step + 1);
+    } catch {
+      err.textContent = 'No se pudo generar la cotización. Intenta de nuevo.';
+      n.innerHTML = 'Generar mi cotización<i class="arrow"></i>'; n.style.pointerEvents = 'auto';
+    }
+  }
+
+  /* PASO 4 — resultado */
+  function renderResultado() {
+    const d = state.result, q = d.quote;
+    const incl = (q.includes || []).map(i => `<li>${esc(i)}</li>`).join('');
+    const feats = (q.features || []).length ? `<p class="cz__sub">Lo que pediste</p><ul class="cz__incl">${q.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : '';
+    const adds = (q.addons || []).length ? `<div class="rz__addons">${q.addons.map(a => `<div class="row"><span>${esc(a.label)}</span><span>+${money(a.price)}</span></div>`).join('')}</div>` : '';
+    card.innerHTML = `
+      <p class="cz__step-lbl" style="text-align:center;display:block;margin-bottom:8px">Cotización ${esc(d.quoteId)}</p>
+      <div class="rz__amount">${esc(q.rangeText)}</div>
+      <p class="rz__sub">${esc(q.package.label)}${q.variant ? ' · ' + esc(q.variant.label) : ''}</p>
+      <p class="cz__sub">Tu servicio incluye</p>
+      <ul class="cz__incl">${incl}</ul>
+      ${feats}${adds}
+      <p class="rz__note">${esc(q.note)} · Válida por ${q.validDays} días.</p>
+      <div class="rz__cta">
+        <a class="btn btn--ghost" href="${esc(d.pdfUrl)}" target="_blank" rel="noopener">⬇ Descargar PDF</a>
+        <button class="btn btn--gold" id="czAccept">${q.custom ? 'Solicitar mi cotización' : 'Aceptar y agendar asesoría'}<i class="arrow"></i></button>
+      </div>
+      <div class="cz-err" id="czErr" style="text-align:center"></div>`;
+    $('#czAccept').onclick = accept;
+  }
+
+  async function accept() {
+    const d = state.result, btn = $('#czAccept');
+    btn.innerHTML = '<span class="cz-spin"></span>Enviando…'; btn.style.pointerEvents = 'none';
+    try {
+      const r = await fetch(API + `/api/quote/${d.id}/accept`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ t: d.token }) });
+      if (!r.ok) throw new Error('error');
+      step = STEPS.length; setProgress();
+      const first = (state.client.name || '').split(' ')[0];
+      card.innerHTML = `<div class="cz__done"><div class="big">🎉</div>
+        <h2 class="cz__q" style="margin-top:8px">¡Gracias${first ? ', ' + esc(first) : ''}!</h2>
+        <p class="cz__hint" style="margin-bottom:20px">Recibimos tu solicitud. Un experto de Montana Capital te contactará muy pronto (normalmente en menos de 24 horas).</p>
+        <div class="rz__cta">
+          <a class="btn btn--ghost" href="${esc(d.pdfUrl)}" target="_blank" rel="noopener">⬇ Descargar mi cotización</a>
+          <a class="btn btn--gold" href="https://wa.me/573153252155?text=${encodeURIComponent('Hola Montana Capital, acepté mi cotización ' + d.quoteId + ' y quiero asesoría.')}" target="_blank" rel="noopener">Escribir por WhatsApp<i class="arrow"></i></a>
+        </div></div>`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {
+      $('#czErr').textContent = 'No se pudo registrar. Intenta de nuevo o escríbenos por WhatsApp.';
+      btn.innerHTML = 'Aceptar y agendar asesoría<i class="arrow"></i>'; btn.style.pointerEvents = 'auto';
+    }
+  }
+
+  /* helpers que dependen de CFG */
+  function packageLabel(id) { const p = CFG.packages.find(x => x.id === id); return p ? p.label.toLowerCase() : 'proyecto'; }
+  function includesKey(t, v) {
+    if (t === 'landing') return 'landing';
+    if (t === 'web') return v === 'backoffice' ? 'web_backoffice' : 'web_informativa';
+    if (t === 'empresarial') return 'empresarial';
+    if (t === 'ia') return v === 'empresarial' ? 'ia_empresarial' : v === 'avanzado' ? 'ia_avanzado' : 'ia_basico';
+    if (t === 'blockchain') return 'blockchain';
+    return 'landing';
+  }
+
+  card.innerHTML = '<p class="cz__hint" style="text-align:center"><span class="cz-spin"></span>Cargando cotizador…</p>';
+  fetch(API + '/api/quote/config').then(r => r.json()).then(cfg => { CFG = cfg; render(); anim(); })
+    .catch(() => { card.innerHTML = '<p class="cz__hint" style="text-align:center">No se pudo cargar el cotizador. Refresca la página.</p>'; });
+})();
+</script>
+</body>
+</html>

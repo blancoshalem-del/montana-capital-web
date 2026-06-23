@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Proyectos — Montana Capital SAS</title>
+<meta name="description" content="Proyectos realizados por Montana Capital: EVENTIO (web y DApp), Mirago Hotel, Mirago Eventos y Euphoria. Desarrollo blockchain, NFT, smart contracts y DApps. Co-creación bajo contrato y MVPs en venta para inversionistas." />
+<meta name="theme-color" content="#04060d" />
+<meta property="og:title" content="Proyectos — Montana Capital SAS" />
+<meta property="og:description" content="Desarrollo propio y a la medida: Web3, blockchain, NFT y software empresarial. Conoce nuestro portafolio y oportunidades de inversión." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://montanacapital.com.co/proyectos.html" />
+<meta property="og:image" content="https://montanacapital.com.co/assets/logo-mark.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Proyectos — Montana Capital SAS" />
+<meta name="twitter:description" content="Portafolio Web3 en producción y MVPs propios listos para inversión." />
+<meta name="twitter:image" content="https://montanacapital.com.co/assets/logo-mark.png" />
+<link rel="canonical" href="https://montanacapital.com.co/proyectos.html" />
+<link rel="icon" type="image/png" href="assets/logo-mark.png" />
+<link rel="apple-touch-icon" href="assets/logo-mark.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<noscript><style>[data-reveal]{opacity:1!important;transform:none!important}.count{visibility:visible}.tilt{transform:none!important}</style></noscript>
+</head>
+<body class="inner-page" data-page="proyectos">
+
+<!-- Ajustes puntuales SOLO de esta página (prioriza clases globales) -->
+<style>
+  /* Iconos de blockchain = tecnología/estructura → cian (oro reservado a inversión) */
+  [data-page="proyectos"] .bcard__ic{
+    color:var(--cyan);
+    background:linear-gradient(150deg,rgba(98,214,255,.16),rgba(98,214,255,.04));
+    border-color:rgba(98,214,255,.22);
+  }
+  [data-page="proyectos"] .bcard__ic svg{stroke:currentColor;fill:none}
+  [data-page="proyectos"] .mvp__ic svg{width:26px;height:26px;stroke:currentColor;fill:none}
+  /* Imágenes responsivas sin CLS dentro de los mockups */
+  [data-page="proyectos"] .proj__media img{display:block;width:100%;height:auto}
+  /* Métricas de tracción / mercado citables */
+  [data-page="proyectos"] .proj__stats{
+    display:flex;flex-wrap:wrap;gap:26px;margin-top:22px;
+  }
+  [data-page="proyectos"] .proj__stats div{display:flex;flex-direction:column;gap:2px}
+  [data-page="proyectos"] .proj__stats b{
+    font-family:var(--display);font-size:1.55rem;font-weight:600;
+    color:var(--gold);line-height:1;letter-spacing:-.01em;
+  }
+  [data-page="proyectos"] .proj__stats span{font-size:.78rem;color:var(--muted);letter-spacing:.02em}
+  /* Banda CTA en dos rutas (cliente / inversionista) */
+  [data-page="proyectos"] .cta-split{
+    display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px;text-align:left;
+  }
+  [data-page="proyectos"] .cta-route h3{
+    font-family:var(--display);font-weight:600;font-size:var(--fs-h3);margin-bottom:8px;
+  }
+  [data-page="proyectos"] .cta-route p{color:var(--muted);line-height:1.55;margin-bottom:18px;font-size:.98rem}
+  @media (max-width:760px){[data-page="proyectos"] .cta-split{grid-template-columns:1fr}}
+</style>
+
+<!-- HERO -->
+<section class="page-hero">
+  <canvas class="ambient" aria-hidden="true"></canvas>
+  <div class="page-hero__inner">
+    <p class="crumbs"><a href="index.html">Inicio</a> / Proyectos</p>
+    <span class="kicker">Portafolio &amp; oportunidades</span>
+    <h1>Lo que construimos.<br/><em>Lo que viene.</em></h1>
+    <p>Desarrollo propio y a la medida: plataformas, apps y protocolos Web3 en producción.
+       Y un modelo de startup donde puedes co-crear con nosotros bajo contrato o invertir
+       en nuestros MVPs.</p>
+  </div>
+</section>
+
+<!-- ============ PROYECTOS REALIZADOS ============ -->
+<section class="section">
+  <div class="section__head">
+    <span class="kicker" data-reveal>Proyectos realizados</span>
+    <h2 class="h2" data-reveal>Productos reales, en manos<br/>de clientes reales.</h2>
+    <p class="section__sub" data-reveal>Desde nuestro propio protocolo de boletería NFT hasta plataformas
+      para hotelería y producción de eventos. Cada proyecto, diseñado, desarrollado y desplegado por Montana Capital.</p>
+  </div>
+
+  <div class="showcase">
+
+    <!-- EVENTIO web -->
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">eventio.app</span></div>
+          <picture>
+            <source srcset="assets/portfolio/eventio-web.webp" type="image/webp"/>
+            <img src="assets/portfolio/eventio-web.png" width="1200" height="719" alt="EVENTIO — plataforma web de boletería NFT" loading="lazy" decoding="async"/>
+          </picture>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Desarrollo propio · Web3</p>
+        <h3>EVENTIO — el protocolo de eventos tokenizados</h3>
+        <p>Nuestra apuesta insignia en blockchain: cada entrada es un <b>NFT único y verificable on-chain</b>.
+          Pagos directos, cero reventa fraudulenta y trazabilidad total. Construido sobre Polygon con
+          contratos inteligentes auditables y token EVC con respaldo 1:1.</p>
+        <div class="tagrow">
+          <span class="tag g">NFT Tickets</span><span class="tag g">Smart contracts</span>
+          <span class="tag">Token EVC</span><span class="tag">Polygon</span><span class="tag">Web3</span>
+        </div>
+        <div class="proj__stats">
+          <div><b>+1.000</b><span>Tickets NFT emitidos</span></div>
+          <div><b>100%</b><span>Contratos desplegados en Polygon</span></div>
+          <div><b>USD 85&nbsp;mil M</b><span>Mercado global de ticketing en 2030*</span></div>
+        </div>
+        <div class="proj__meta">
+          <div><b>Polygon</b><span>Smart contracts on-chain (ERC-1155)</span></div>
+          <div><b>Token EVC</b><span>Respaldo 1:1 verificable</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- EVENTIO dapp móvil -->
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="phones">
+          <div class="device device--solo tilt">
+            <div class="device__screen"><picture>
+              <source srcset="assets/portfolio/eventio-app.webp" type="image/webp"/>
+              <img src="assets/portfolio/eventio-app.png" width="760" height="1437" alt="EVENTIO — panel staff móvil de tickets NFT" loading="lazy" decoding="async"/>
+            </picture></div>
+          </div>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Desarrollo propio · App / Panel staff</p>
+        <h3>EVENTIO — panel staff de tickets NFT</h3>
+        <p>La app del personal para operar el control de acceso: <b>emitir (mint), validar (consume)
+          y administrar</b> entradas NFT por evento, con roles y permisos. Aquí el staff gestiona cada
+          concierto y verifica los pases on-chain (estándar ERC-1155) desde el celular.</p>
+        <div class="tagrow">
+          <span class="tag g">Panel staff</span><span class="tag g">Mint / Consume</span>
+          <span class="tag">ERC-1155</span><span class="tag">Roles &amp; permisos</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- EUPHORIA -->
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">euphoriagastrobarcali.com.co</span></div>
+          <picture>
+            <source srcset="assets/portfolio/euphoria.webp" type="image/webp"/>
+            <img src="assets/portfolio/euphoria.png" width="1200" height="755" alt="Euphoria — sitio web del gastrobar" loading="lazy" decoding="async"/>
+          </picture>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Cliente · Gastrobar premium</p>
+        <h3>Euphoria — sitio web del gastrobar</h3>
+        <p>Para Euphoria (Granada, Cali) desarrollamos su <b>sitio web premium</b>: una experiencia
+          inmersiva de alta cocina fusión, con carta digital, <b>reservas en línea</b> y reserva directa
+          por WhatsApp. Identidad de marca cuidada al detalle y un diseño impecable que invita a vivir la noche.</p>
+        <div class="tagrow">
+          <span class="tag">Sitio web</span><span class="tag">Reservas online</span>
+          <span class="tag">Carta digital</span><span class="tag">Branding</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- PCIG EUPHORIA — panel interno -->
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">pcigeuphoria.com</span></div>
+          <picture>
+            <source srcset="assets/portfolio/pcig.webp" type="image/webp"/>
+            <img src="assets/portfolio/pcig.png" width="1200" height="755" alt="PCIG Euphoria — plataforma de control de inventario con acceso seguro" loading="lazy" decoding="async"/>
+          </picture>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Desarrollo propio · Plataforma interna · Web3</p>
+        <h3>PCIG — control de inventario de Euphoria</h3>
+        <p>Una <b>plataforma interna de control de inventario</b> para Euphoria: registro y seguimiento
+          de existencias, movimientos y stock en tiempo real, con <b>acceso seguro</b> y un control de
+          ingreso innovador mediante <b>licencia NFT</b>. Toda la operación de inventario en una sola
+          herramienta, segura y a la medida.</p>
+        <div class="tagrow">
+          <span class="tag g">Control de inventario</span><span class="tag g">Acceso NFT</span>
+          <span class="tag">Login seguro</span><span class="tag">Plataforma interna</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- MIRAGO HOTEL -->
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">miragohotel.com</span></div>
+          <picture>
+            <source srcset="assets/portfolio/mirago-hotel.webp" type="image/webp"/>
+            <img src="assets/proj_mirago_hotel.png" width="1600" height="1007" alt="Mirago Hotel — sitio web con motor de reservas" loading="lazy" decoding="async"/>
+          </picture>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Cliente · Hotelería</p>
+        <h3>Mirago Hotel — sitio web &amp; reservas</h3>
+        <p>Sitio corporativo para Mirago Hotels (Cali · Acopi, Yumbo): hospitalidad ejecutiva con
+          <b>motor de reservas integrado</b>, habitaciones, convenios corporativos y contacto directo por
+          WhatsApp. Diseño sobrio, cálido y orientado a la conversión.</p>
+        <div class="tagrow">
+          <span class="tag">Sitio corporativo</span><span class="tag">Motor de reservas</span>
+          <span class="tag">SEO</span><span class="tag">WhatsApp</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- MIRAGO EVENTOS -->
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">miragoeventos.com</span></div>
+          <picture>
+            <source srcset="assets/portfolio/mirago.webp" type="image/webp"/>
+            <img src="assets/portfolio/mirago.png" width="1200" height="755" alt="Mirago Eventos — sitio de producción BTL y corporativa" loading="lazy" decoding="async"/>
+          </picture>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Cliente · Producción de eventos</p>
+        <h3>Mirago Eventos — producción BTL &amp; corporativa</h3>
+        <p>Plataforma para Mirago Eventos: más de 15 años de producción y logística para eventos
+          corporativos, sociales y artísticos en Cali, Yumbo y el Valle. Catálogo de servicios y equipos,
+          experiencias y <b>cotización en línea</b> de eventos.</p>
+        <div class="tagrow">
+          <span class="tag">Catálogo</span><span class="tag">Cotizador</span>
+          <span class="tag">Producción BTL</span><span class="tag">Corporativo</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ ENFOQUE BLOCKCHAIN ============ -->
+<section class="section">
+  <div class="section__head">
+    <span class="kicker" data-reveal>Nuestro terreno</span>
+    <h2 class="h2" data-reveal>Especialistas en blockchain<br/>y activos digitales.</h2>
+  </div>
+  <div class="feature-grid">
+    <article class="bcard" data-reveal>
+      <div class="bcard__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v10M9.3 9.3h3.7a1.85 1.85 0 0 1 0 3.7H9.3m0 0h4a1.85 1.85 0 0 1 0 3.7H9.3"/></svg></div>
+      <h3>Tokens &amp; criptoactivos</h3><p>Diseño y emisión de tokens utilitarios y de respaldo, con tokenomics a la medida del negocio.</p>
+    </article>
+    <article class="bcard" data-reveal>
+      <div class="bcard__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 20 7.4v9.2L12 21.2 4 16.6V7.4z"/><path d="M12 7.5 16 9.7v4.6L12 16.5 8 14.3V9.7z"/></svg></div>
+      <h3>NFT con utilidad real</h3><p>Coleccionables, membresías y entradas verificables on-chain — no solo arte, sino acceso y derechos.</p>
+    </article>
+    <article class="bcard" data-reveal>
+      <div class="bcard__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5"/><path d="m8.5 13 2 2-2 2M13 17h3"/></svg></div>
+      <h3>Smart contracts</h3><p>Contratos inteligentes auditables que ejecutan reglas de negocio sin intermediarios ni fricción.</p>
+    </article>
+    <article class="bcard" data-reveal>
+      <div class="bcard__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.2 9.5h17.6M3.2 14.5h17.6"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg></div>
+      <h3>DApps</h3><p>Aplicaciones descentralizadas con UX cuidada: la potencia de Web3 sin la complejidad para el usuario.</p>
+    </article>
+    <article class="bcard" data-reveal>
+      <div class="bcard__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9.5" width="7.5" height="5" rx="2.5" transform="rotate(-45 7.25 12)"/><rect x="13" y="9.5" width="7.5" height="5" rx="2.5" transform="rotate(-45 16.75 12)"/><path d="m10.2 13.8 3.6-3.6"/></svg></div>
+      <h3>Integración blockchain</h3><p>Conectamos tu plataforma actual con la cadena: pagos, trazabilidad y registros inmutables.</p>
+    </article>
+    <article class="bcard" data-reveal>
+      <div class="bcard__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="12" rx="1.6"/><path d="M3.5 9.5h17M8 20h8M12 16.5V20"/></svg></div>
+      <h3>Software empresarial</h3><p>Plataformas, apps móviles y agentes de IA que se integran a tu operación de punta a punta.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ MODELO DE SOCIEDAD ============ -->
+<section class="section">
+  <div class="split">
+    <div class="prose">
+      <span class="kicker" data-reveal>Somos una startup</span>
+      <h2 class="h2" data-reveal>¿Tienes una idea?<br/>La construimos juntos.</h2>
+      <p data-reveal>Montana Capital no es solo una fábrica de software: somos una <b>startup tecnológica</b>
+        que se asocia con quienes tienen una visión. Podemos desarrollar tu proyecto <b>en sociedad</b> y,
+        bajo contrato, definir términos claros, participación y responsabilidades.</p>
+      <ul class="checklist">
+        <li data-reveal><b>Co-creación bajo contrato</b> — reglas, hitos y participación por escrito.</li>
+        <li data-reveal><b>Equipo técnico completo</b> — producto, diseño, desarrollo y blockchain.</li>
+        <li data-reveal><b>Riesgo compartido</b> — crecemos cuando tu proyecto crece.</li>
+        <li data-reveal><b>Confidencialidad</b> — tu idea está protegida desde la primera conversación.</li>
+      </ul>
+      <a href="contacto.html" class="btn btn--gold" data-reveal style="margin-top:1.8rem">Proponer una sociedad<i class="arrow"></i></a>
+    </div>
+    <div class="prose" data-reveal>
+      <div class="pact">
+        <div class="pact__item">
+          <div class="pact__num">01</div>
+          <h3>Conversamos</h3>
+          <p>Escuchamos tu idea, evaluamos viabilidad técnica y de negocio, y firmamos confidencialidad.</p>
+        </div>
+        <div class="pact__item">
+          <div class="pact__num">02</div>
+          <h3>Definimos el contrato</h3>
+          <p>Alcance, aportes de cada parte, participación, hitos y propiedad intelectual — todo por escrito.</p>
+        </div>
+        <div class="pact__item">
+          <div class="pact__num">03</div>
+          <h3>Construimos y lanzamos</h3>
+          <p>Desarrollamos el MVP, lo validamos con usuarios reales y escalamos el producto en sociedad.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MVPs EN VENTA ============ -->
+<section class="section">
+  <div class="section__head">
+    <span class="kicker" data-reveal>Para inversionistas</span>
+    <h2 class="h2" data-reveal>MVPs propios, listos para<br/>encontrar su financiador.</h2>
+    <p class="section__sub" data-reveal>Desarrollamos productos propios hasta etapa de MVP. Si alguno encaja con tu tesis de inversión,
+      puedes <b>entrar como financiador o socio</b> y llevarlo a escala con nosotros.</p>
+  </div>
+  <div class="mvp-grid">
+    <article class="mvp" data-reveal>
+      <div class="mvp__head"><span class="mvp__stage">MVP · En venta</span><span class="mvp__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v10M9.3 9.3h3.7a1.85 1.85 0 0 1 0 3.7H9.3m0 0h4a1.85 1.85 0 0 1 0 3.7H9.3"/></svg></span></div>
+      <div class="mvp__body">
+        <h3>EVENTIO</h3>
+        <p>Protocolo de boletería NFT ya funcional: web, DApp y contratos desplegados en Polygon, con
+          <b>+1.000 tickets emitidos</b> y token EVC con respaldo 1:1. Listo para escalar a productoras y
+          recintos en un mercado de ticketing valorado en <b>USD 85&nbsp;mil millones para 2030*</b>.</p>
+        <div class="mvp__foot"><small>Oportunidad</small><b>Socio / financiador</b></div>
+      </div>
+    </article>
+    <article class="mvp" data-reveal>
+      <div class="mvp__head"><span class="mvp__stage">MVP · En desarrollo</span><span class="mvp__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.2 9.5h17.6M3.2 14.5h17.6"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg></span></div>
+      <div class="mvp__body">
+        <h3>Agente de IA comercial</h3>
+        <p>Asistente de IA que atiende, califica y clasifica solicitudes de clientes 24/7 por WhatsApp,
+          web y CRM. Pensado para pymes que quieren automatizar su primer contacto y sus ventas.</p>
+        <div class="mvp__foot"><small>Oportunidad</small><b>Financiación seed</b></div>
+      </div>
+    </article>
+    <article class="mvp" data-reveal>
+      <div class="mvp__head"><span class="mvp__stage">MVP · Concepto</span><span class="mvp__ic"><svg viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 20 7.4v9.2L12 21.2 4 16.6V7.4z"/><path d="M12 7.5 16 9.7v4.6L12 16.5 8 14.3V9.7z"/></svg></span></div>
+      <div class="mvp__body">
+        <h3>Programa de fidelización on-chain</h3>
+        <p>Puntos y membresías como NFT para comercios y restaurantes: recompensas transferibles,
+          trazables y con utilidad real. Tokenización del loyalty tradicional.</p>
+        <div class="mvp__foot"><small>Oportunidad</small><b>Co-creación</b></div>
+      </div>
+    </article>
+  </div>
+  <div style="text-align:center;margin-top:46px" data-reveal>
+    <a href="contacto.html?intent=inversion" class="btn btn--gold">Solicitar el deck de inversión<i class="arrow"></i></a>
+    <p style="color:var(--muted);font-size:.8rem;margin-top:18px;max-width:60ch;margin-inline:auto;line-height:1.5">
+      *Tamaño estimado del mercado global de venta de entradas en eventos hacia 2030 según proyecciones
+      de la industria. Cifras de tracción de EVENTIO a la fecha; el material detallado se comparte bajo NDA.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="cta-band" data-reveal>
+    <h2 class="h2">Dos formas de avanzar.</h2>
+    <p>Ya tengas un producto por construir o capital buscando dónde crecer, hay una ruta clara para ti.</p>
+    <div class="cta-split">
+      <div class="cta-route">
+        <h3>Tienes un proyecto</h3>
+        <p>Te entregamos producto, diseño, desarrollo y blockchain bajo un mismo techo — con un plan, un
+          presupuesto y una fecha de lanzamiento desde la primera reunión.</p>
+        <a href="contacto.html?intent=proyecto" class="btn btn--ghost">Cotizar mi proyecto<i class="arrow"></i></a>
+      </div>
+      <div class="cta-route">
+        <h3>Quieres invertir</h3>
+        <p>Conoce nuestros MVPs propios con tracción real y entra como financiador o socio. Te enviamos el
+          deck y las métricas detalladas bajo NDA.</p>
+        <a href="contacto.html?intent=inversion" class="btn btn--gold">Solicitar información de inversión<i class="arrow"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script defer src="site.js"></script>
+</body>
+</html>

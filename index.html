@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Montana Capital SAS — Software, IA y Web3 a la medida</title>
+<meta name="description" content="Aceleramos el crecimiento de tu empresa con software, inteligencia artificial y Web3 a la medida — con producto propio en producción. Desde Cali, Colombia." />
+<meta name="theme-color" content="#04060d" />
+<link rel="canonical" href="https://montanacapital.com.co/" />
+<link rel="icon" type="image/png" href="assets/logo-mark.png" />
+<link rel="apple-touch-icon" href="assets/logo-mark.png" />
+
+<meta property="og:title" content="Montana Capital SAS — Software, IA y Web3 a la medida" />
+<meta property="og:description" content="Aceleramos tu crecimiento con software, IA y Web3 a la medida — con producto propio en producción." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://montanacapital.com.co/" />
+<meta property="og:image" content="https://montanacapital.com.co/assets/logo-mark.png" />
+<meta property="og:locale" content="es_CO" />
+<meta property="og:site_name" content="Montana Capital SAS" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Montana Capital SAS — Software, IA y Web3 a la medida" />
+<meta name="twitter:description" content="Aceleramos tu crecimiento con software, IA y Web3 a la medida — con producto propio en producción." />
+<meta name="twitter:image" content="https://montanacapital.com.co/assets/logo-mark.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<noscript><style>.portal__title{opacity:1}</style></noscript>
+
+<style>
+  /* === Ajustes puntuales solo de la home === */
+  .portal__partner{
+    margin:18px auto 4px;max-width:560px;
+    font-family:'Space Grotesk',sans-serif;font-weight:500;
+    font-size:.94rem;letter-spacing:.01em;color:var(--cyan);
+    opacity:.95;line-height:1.5;
+  }
+  /* iconos line-art dentro de las tarjetas de servicio */
+  .bcard__ic svg{width:26px;height:26px;display:block}
+  .bcard__ic{display:inline-flex;align-items:center;justify-content:center}
+  /* bullets de entregables y plazo en pricing */
+  .price__list{
+    list-style:none;margin:14px 0 4px;padding:0;
+    display:flex;flex-direction:column;gap:9px;
+  }
+  .price__list li{
+    position:relative;padding-left:24px;
+    font-size:.9rem;line-height:1.45;color:var(--ink-2,#aeb8cc);
+  }
+  .price__list li::before{
+    content:"";position:absolute;left:0;top:.42em;
+    width:13px;height:13px;border-radius:50%;
+    background:radial-gradient(circle at 50% 50%,rgba(98,214,255,.35),rgba(98,214,255,0) 70%);
+    box-shadow:0 0 0 1px rgba(98,214,255,.5) inset;
+  }
+  .price__list li::after{
+    content:"";position:absolute;left:4px;top:.72em;
+    width:5px;height:2.5px;border-left:1.6px solid var(--cyan);
+    border-bottom:1.6px solid var(--cyan);transform:rotate(-45deg);
+  }
+  .price__eta{
+    margin:14px 0 18px;font-family:'Space Grotesk',sans-serif;
+    font-size:.82rem;font-weight:500;letter-spacing:.03em;
+    color:var(--cyan);opacity:.9;
+  }
+  /* microcopy bajo el CTA principal */
+  .cta-band__micro{
+    margin:12px 0 22px;font-size:.85rem;letter-spacing:.02em;
+    color:var(--ink-2,#aeb8cc);opacity:.85;
+  }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://montanacapital.com.co/#organization",
+      "name": "Montana Capital SAS",
+      "url": "https://montanacapital.com.co/",
+      "logo": "https://montanacapital.com.co/assets/logo-mark.png",
+      "description": "Desarrollo de software, inteligencia artificial y soluciones Web3 a la medida.",
+      "areaServed": "CO",
+      "knowsAbout": ["Software a la medida","Inteligencia Artificial","Blockchain","Smart contracts","NFT","Aplicaciones móviles"]
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://montanacapital.com.co/#localbusiness",
+      "name": "Montana Capital SAS",
+      "image": "https://montanacapital.com.co/assets/logo-mark.png",
+      "url": "https://montanacapital.com.co/",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Cali",
+        "addressRegion": "Valle del Cauca",
+        "addressCountry": "CO"
+      }
+    }
+  ]
+}
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body data-page="home">
+
+<!-- ============ PORTAL · immersive 3D entry ============ -->
+<section class="portal" id="portal">
+  <canvas id="scene" class="portal__fx"></canvas>
+  <div class="portal__grade"></div>
+  <div class="portal__vignette"></div>
+
+  <div class="portal__inner">
+    <div class="portal__emblem"><span class="portal__emblem-ring" aria-hidden="true"></span><img src="assets/logo-mark.png" alt="Montana Capital SAS" /></div>
+    <span class="portal__eyebrow"><i class="dot" aria-hidden="true"></i>FINTECH • BLOCKCHAIN • SOFTWARE • IA</span>
+    <h1 class="portal__title">MONTANA CAPITAL <em>SAS</em></h1>
+    <span class="portal__rule" aria-hidden="true"></span>
+    <p class="portal__tag">Software, inteligencia artificial y Web3 <b>a la medida</b> para acelerar el crecimiento de tu empresa.</p>
+
+    <p class="portal__partner">No solo desarrollamos: nos asociamos contigo y compartimos el riesgo.</p>
+
+    <div class="portal__stats" aria-label="Indicadores de confianza">
+      <div class="ptrust"><i class="ptrust__ck"></i>Respuesta en &lt;24h</div>
+      <span class="pstat__sep" aria-hidden="true"></span>
+      <div class="ptrust"><i class="ptrust__ck"></i>Confidencialidad firmada</div>
+      <span class="pstat__sep" aria-hidden="true"></span>
+      <div class="ptrust"><i class="ptrust__ck"></i>Producto propio en producción</div>
+    </div>
+
+    <div class="portal__actions">
+      <a href="cotizador.html" class="btn btn--gold portal__cta">Cotiza tu proyecto<i class="arrow"></i></a>
+      <a href="proyectos.html" class="btn btn--ghost portal__cta2">Ver casos de éxito</a>
+    </div>
+  </div>
+
+  <div class="portal__scrollnote">CALI · COLOMBIA — INNOVAMOS HOY, CONSTRUIMOS EL FUTURO</div>
+</section>
+
+<!-- ============ CIFRAS ============ -->
+<section class="section section--tight home-section">
+  <div class="home-stats">
+    <div class="hstat" data-reveal><b class="count" data-to="5">0</b><span>productos propios en producción</span></div>
+    <div class="hstat" data-reveal><b class="count" data-to="4">0</b><span>áreas de especialidad bajo un mismo equipo</span></div>
+    <div class="hstat" data-reveal><b>24/7</b><span>agentes de IA atendiendo a tus clientes</span></div>
+    <div class="hstat" data-reveal><b class="count" data-to="100" data-suffix="%">0</b><span>desarrollo a la medida, sin plantillas</span></div>
+  </div>
+</section>
+
+<!-- ============ PROYECTOS DESTACADOS ============ -->
+<section class="section home-section">
+  <div class="section__head">
+    <span class="kicker" data-reveal>Casos de éxito</span>
+    <h2 class="h2" data-reveal>Productos reales,<br/>en manos de clientes reales.</h2>
+    <p class="section__sub" data-reveal>Una muestra de lo que construimos: desde nuestro propio protocolo de boletería NFT
+      hasta plataformas para hotelería y gastronomía premium.</p>
+  </div>
+
+  <div class="showcase">
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">eventio.app</span></div>
+          <img src="assets/portfolio/eventio-web.png" alt="EVENTIO — plataforma web de boletería NFT" loading="lazy" width="1200" height="719"/>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Desarrollo propio · Web3</p>
+        <h3>EVENTIO — entradas NFT verificables on-chain, sin reventa fraudulenta</h3>
+        <p>Nuestra apuesta insignia: cada entrada es un <b>NFT único y verificable on-chain</b> sobre Polygon.
+          Pagos directos, sin reventa fraudulenta y con trazabilidad total.</p>
+        <div class="tagrow"><span class="tag g">NFT Tickets</span><span class="tag g">Smart contracts</span><span class="tag">Polygon</span></div>
+      </div>
+    </article>
+
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">miragohotel.com</span></div>
+          <img src="assets/proj_mirago_hotel.png" alt="Mirago Hotel — sitio web con motor de reservas" loading="lazy" width="1280" height="800"/>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Cliente · Hotelería</p>
+        <h3>Mirago Hotel — sitio web &amp; reservas</h3>
+        <p>Sitio corporativo con <b>motor de reservas integrado</b>, habitaciones, convenios corporativos
+          y contacto directo por WhatsApp. Diseño sobrio orientado a la conversión.</p>
+        <div class="tagrow"><span class="tag">Sitio corporativo</span><span class="tag">Motor de reservas</span><span class="tag">SEO</span></div>
+      </div>
+    </article>
+
+    <article class="proj" data-reveal>
+      <div class="proj__media">
+        <div class="browser tilt">
+          <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">euphoriagastrobarcali.com.co</span></div>
+          <img src="assets/portfolio/euphoria.png" alt="Euphoria — sitio web del gastrobar" loading="lazy" width="1280" height="800"/>
+        </div>
+      </div>
+      <div class="proj__body">
+        <p class="proj__eyebrow">Cliente · Gastrobar premium</p>
+        <h3>Euphoria — sitio web del gastrobar</h3>
+        <p>Una experiencia inmersiva de alta cocina con <b>carta digital y reservas en línea</b>, branding
+          cuidado al detalle y un diseño impecable en móvil.</p>
+        <div class="tagrow"><span class="tag">Sitio web</span><span class="tag">Reservas online</span><span class="tag">Branding</span></div>
+      </div>
+    </article>
+  </div>
+
+  <div style="text-align:center;margin-top:42px" data-reveal>
+    <a href="proyectos.html" class="btn btn--gold">Ver todo el portafolio<i class="arrow"></i></a>
+  </div>
+</section>
+
+<!-- ============ COTIZADOR EN LÍNEA ============ -->
+<section class="section home-section">
+  <div class="section__head" style="text-align:center;margin-inline:auto">
+    <span class="kicker" data-reveal style="padding-left:0">Cotizador en línea</span>
+    <h2 class="h2" data-reveal>Conoce tu inversión<br/>en menos de un minuto.</h2>
+    <p class="section__sub" data-reveal>Sin llamadas ni esperas. Responde unas preguntas, recibe una <b>cotización estimada en PDF</b>
+      con la marca de Montana Capital y, si te convence, agenda tu asesoría con un clic.</p>
+  </div>
+
+  <div class="quoter-cta" data-reveal>
+    <div class="quoter-cta__steps">
+      <div class="qstep"><span class="qstep__n">1</span><div><b>Cuéntanos qué necesitas</b><small>Tipo de proyecto, funciones (login, base de datos, pagos…), tamaño y plazo.</small></div></div>
+      <div class="qstep"><span class="qstep__n">2</span><div><b>Recibe tu cotización en PDF</b><small>Estimado al instante con el desglose, a tu nombre y con nuestra marca.</small></div></div>
+      <div class="qstep"><span class="qstep__n">3</span><div><b>Descarga o agenda asesoría</b><small>Guarda tu PDF y, si quieres, un experto te contacta en menos de 24h.</small></div></div>
+    </div>
+    <div class="quoter-cta__panel">
+      <p class="quoter-cta__eyebrow">Para todo tipo de proyecto</p>
+      <div class="quoter-cta__chips">
+        <span>Landing page</span><span>Página web</span><span>Plataforma empresarial</span>
+        <span>Agente de IA</span><span>Blockchain / Web3</span>
+      </div>
+      <a href="cotizador.html" class="btn btn--gold" style="margin-top:8px">Iniciar mi cotización<i class="arrow"></i></a>
+      <p class="quoter-cta__note">Gratis · sin compromiso · tu PDF al instante</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section home-section">
+  <div class="cta-band" data-reveal>
+    <h2 class="h2">Pongamos tu idea en producción.</h2>
+    <p>Cuéntanos a dónde quieres llevar tu empresa. Te devolvemos una propuesta clara, con alcance y plazos — y, cuando encaja, nos asociamos contigo.</p>
+    <a href="contacto.html" class="btn btn--gold">Agendar diagnóstico gratuito<i class="arrow"></i></a>
+    <p class="cta-band__micro">Respuesta en &lt;24h · sin compromiso</p>
+    <a href="tecnologia.html" class="btn btn--ghost">Ver todos los servicios</a>
+  </div>
+</section>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script defer src="site.js"></script>
+<script type="module" src="home.js"></script>
+</body>
+</html>

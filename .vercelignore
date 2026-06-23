@@ -1,0 +1,8 @@
+server/
+node_modules
+**/*.log
+.mc-preview
+.claude/
+.git/
+CREDENCIALES-PANEL.txt
+INICIAR-SERVIDOR.command

@@ -1,0 +1,24 @@
+# Configuración de despliegue para Render — Montana Capital SAS (backend + panel interno)
+# Render lee este archivo automáticamente (Blueprint) y crea el servicio.
+# PLAN GRATIS: ideal para probar. OJO: los datos (clientes registrados) se borran
+# cuando el servicio se reinicia/duerme. Para datos permanentes, cambiar plan a "starter"
+# y volver a agregar el bloque "disk" + la variable DATA_DIR=/var/data.
+services:
+  - type: web
+    name: montana-capital-panel
+    runtime: node
+    rootDir: server          # el backend vive en la carpeta server/
+    region: virginia         # US Este (más cerca de Colombia = más rápido)
+    plan: free               # gratis (se duerme sin uso; datos no permanentes)
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true         # se redespliega solo cuando subas cambios a GitHub
+    envVars:
+      - key: JWT_SECRET      # llave de seguridad del login — Render la genera sola
+        generateValue: true
+      - key: ADMIN_EMAIL     # correo del admin del panel — se define en el dashboard
+        sync: false
+      - key: ADMIN_PASSWORD  # contraseña del admin — se define en el dashboard (no en el código)
+        sync: false
+      - key: ALLOWED_ORIGINS # dominios permitidos a llamar la API (tu web en Vercel)
+        sync: false
