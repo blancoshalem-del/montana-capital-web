@@ -20,8 +20,10 @@
       radial-gradient(40% 46% at 60% 90%,rgba(231,194,100,.08),transparent 60%);
     filter:blur(10px);animation:aurora 24s ease-in-out infinite alternate}
   @keyframes aurora{0%{transform:translate3d(-2%,-2%,0) scale(1.05)}100%{transform:translate3d(3%,2%,0) scale(1.12)}}
-  /* fondo de la pantalla de ingreso (la imagen de la montaña) */
-  body.login-mode{background:#04060d url('/assets/login-bg.png') center/cover no-repeat fixed}
+  /* fondo de la pantalla de ingreso (la imagen de la montaña).
+     Sin 'fixed': background-attachment:fixed no se renderiza en muchos
+     navegadores móviles (la montaña "desaparecía" en el celular). */
+  body.login-mode{background:#04060d url('/assets/login-bg.png') center center/cover no-repeat;background-attachment:scroll}
   body.login-mode::before{inset:0;filter:none;animation:none;
     background:linear-gradient(180deg,rgba(4,6,13,.45),rgba(4,6,13,.82))}
   a{color:var(--cyan);text-decoration:none}

@@ -877,6 +877,13 @@ body::before{
   .portal__actions .btn{width:100%;justify-content:center}
 }
 
+/* ---- blindaje para teléfonos pequeños (≤460px): evita desbordes y cortes
+   de texto a 320/375/390/414/430px. No afecta tablet ni escritorio. ---- */
+@media (max-width:460px){
+  h1,h2,h3,h4,p,li,a,span,small,label,button,td,th{overflow-wrap:break-word}
+  .ptrust{white-space:normal}          /* la línea de confianza envuelve en vez de cortarse */
+}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   [data-reveal]{opacity:1!important;transform:none!important}
