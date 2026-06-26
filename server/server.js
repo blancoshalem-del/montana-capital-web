@@ -439,6 +439,7 @@ function backfillScores() {
   if (changed) { db.save(); console.log('✓ Solicitudes existentes calificadas.'); }
 }
 
+await db.init();
 await ensureAdmin();
 backfillScores();
 app.listen(PORT, () => {

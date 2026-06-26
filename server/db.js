@@ -1,37 +1,74 @@
 /* ============================================================
-   Almacenamiento simple en archivo JSON (sin dependencias nativas).
-   Suficiente y seguro para leads + usuarios. En AWS se puede
-   migrar a PostgreSQL sin cambiar la lógica de las rutas.
+   Almacenamiento de leads + usuarios.
+   - Local / sin configurar: archivo JSON (data.json).
+   - En producción con MONGODB_URI: MongoDB (datos PERMANENTES).
+   La interfaz (db.data, addLead, updateLead, ...) no cambia: se
+   mantiene una copia en memoria (cache) y cada cambio se guarda.
    ============================================================ */
 import { readFileSync, writeFileSync, existsSync, renameSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// En internet (Render/AWS) se puede usar un disco persistente vía DATA_DIR
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const FILE = join(DATA_DIR, 'data.json');
+const MONGODB_URI = process.env.MONGODB_URI || '';
+const MONGODB_DB = process.env.MONGODB_DB || 'montana';
 
 const empty = { users: [], leads: [], seq: { lead: 0 } };
 
-function load() {
+function loadFile() {
   if (!existsSync(FILE)) return structuredClone(empty);
   try { return JSON.parse(readFileSync(FILE, 'utf8')); }
   catch { return structuredClone(empty); }
 }
 
-let cache = load();
+let cache = loadFile();
+let useMongo = false;
+let coll = null;
+let writeChain = Promise.resolve();
 
-function persist() {
-  // escritura atómica: escribe a tmp y renombra
-  const tmp = FILE + '.tmp';
+/* Conecta a MongoDB si hay MONGODB_URI. Debe llamarse (await) antes de usar la db. */
+async function init() {
+  if (!MONGODB_URI) {
+    console.log('• Almacenamiento: archivo local (data.json) — datos NO permanentes en hosting gratis');
+    return;
+  }
+  const { MongoClient } = await import('mongodb');
+  const client = new MongoClient(MONGODB_URI);
+  await client.connect();
+  coll = client.db(MONGODB_DB).collection('state');
+  const doc = await coll.findOne({ _id: 'singleton' });
+  if (doc && doc.data) {
+    cache = { ...structuredClone(empty), ...doc.data };
+  } else {
+    await coll.updateOne({ _id: 'singleton' }, { $set: { data: cache } }, { upsert: true });
+  }
+  useMongo = true;
+  console.log('✓ Almacenamiento: MongoDB (datos permanentes)');
+}
+
+function persistFile() {
+  const tmp = FILE + '.tmp';            // escritura atómica
   writeFileSync(tmp, JSON.stringify(cache, null, 2));
   renameSync(tmp, FILE);
 }
 
+function persist() {
+  if (useMongo) {
+    const snapshot = structuredClone(cache);   // evita mutaciones durante el guardado async
+    writeChain = writeChain
+      .then(() => coll.updateOne({ _id: 'singleton' }, { $set: { data: snapshot } }, { upsert: true }))
+      .catch(err => console.error('⚠ Error guardando en MongoDB:', err.message));
+    return;
+  }
+  persistFile();
+}
+
 export const db = {
+  init,
   get data() { return cache; },
-  reload() { cache = load(); return cache; },
+  reload() { cache = loadFile(); return cache; },
   save() { persist(); },
 
   /* ---- users ---- */
