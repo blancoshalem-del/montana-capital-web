@@ -166,10 +166,60 @@ const TOOL = {
   },
 };
 
-export function aiEnabled() { return !!process.env.ANTHROPIC_API_KEY; }
+export function aiEnabled() { return !!(process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY); }
 
-/* devuelve la MISMA forma que ruleAgentStep: {reply, lead, done} */
-export async function aiAgentStep({ messages = [], lead = {} }) {
+/* Despachador: usa Gemini (gratis) si hay GEMINI_API_KEY; si no, Claude si hay ANTHROPIC_API_KEY.
+   Ambos devuelven la MISMA forma que ruleAgentStep: {reply, lead, done}. */
+export async function aiAgentStep(args) {
+  if (process.env.GEMINI_API_KEY) return geminiAgentStep(args);
+  return anthropicAgentStep(args);
+}
+
+/* ---- Google Gemini (gratis) ---- */
+async function geminiAgentStep({ messages = [], lead = {} }) {
+  const { GoogleGenAI, Type } = await import('@google/genai');
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+  const contents = messages
+    .filter(m => m && (m.role === 'user' || m.role === 'assistant') && m.content)
+    .map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: String(m.content) }] }));
+  if (!contents.length) contents.push({ role: 'user', parts: [{ text: 'Hola' }] });
+
+  const tool = { functionDeclarations: [{
+    name: TOOL.name,
+    description: TOOL.description,
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        name:     { type: Type.STRING, description: 'Nombre del prospecto' },
+        email:    { type: Type.STRING, description: 'Correo electrónico' },
+        phone:    { type: Type.STRING, description: 'Teléfono o WhatsApp (opcional)' },
+        type:     { type: Type.STRING, description: 'Tipo de proyecto (web, app, plataforma, blockchain, etc.)' },
+        budget:   { type: Type.STRING, description: 'Presupuesto aproximado mencionado (opcional)' },
+        timeline: { type: Type.STRING, description: 'Plazo o urgencia (opcional)' },
+        message:  { type: Type.STRING, description: 'Resumen de lo que necesita el prospecto' },
+      },
+      required: ['name', 'email', 'message'],
+    },
+  }] };
+
+  const res = await ai.models.generateContent({
+    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+    contents,
+    config: { systemInstruction: SYSTEM, tools: [tool] },
+  });
+
+  const calls = res.functionCalls;
+  const text = String(res.text || '').trim();
+  if (calls && calls.length) {
+    const d = calls[0].args || {};
+    return { done: true, lead: { ...lead, ...d }, reply: text };
+  }
+  return { reply: text || '¿Me cuentas un poco más?', options: null, lead, done: false };
+}
+
+/* ---- Anthropic Claude (opcional, de pago) ---- */
+async function anthropicAgentStep({ messages = [], lead = {} }) {
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
   const client = new Anthropic();   // toma ANTHROPIC_API_KEY del entorno
 
