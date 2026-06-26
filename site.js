@@ -43,7 +43,7 @@
     <nav class="nav__links" id="navLinks">
       ${links}
       <a href="cotizador.html" class="nav__cta${current === 'cotizador' ? ' is-active' : ''}">Cotizar</a>
-      <a href="/admin" class="nav__panel" title="Acceso interno (panel de control)">Acceso interno</a>
+      <a href="${MC_API}/admin" class="nav__panel" title="Acceso interno (panel de control)">Acceso interno</a>
     </nav>
     <button class="nav__burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>`;
 
