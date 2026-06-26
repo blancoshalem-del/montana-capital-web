@@ -1,9 +1,10 @@
 /* ============================================================
    Almacenamiento de leads + usuarios.
    - Local / sin configurar: archivo JSON (data.json).
-   - En producción con MONGODB_URI: MongoDB (datos PERMANENTES).
+   - En producción con DATABASE_URL: PostgreSQL/Neon (datos PERMANENTES).
    La interfaz (db.data, addLead, updateLead, ...) no cambia: se
    mantiene una copia en memoria (cache) y cada cambio se guarda.
+   Todo el estado se guarda como un único registro JSON (jsonb).
    ============================================================ */
 import { readFileSync, writeFileSync, existsSync, renameSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -12,8 +13,7 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const FILE = join(DATA_DIR, 'data.json');
-const MONGODB_URI = process.env.MONGODB_URI || '';
-const MONGODB_DB = process.env.MONGODB_DB || 'montana';
+const DATABASE_URL = process.env.DATABASE_URL || '';
 
 const empty = { users: [], leads: [], seq: { lead: 0 } };
 
@@ -24,28 +24,30 @@ function loadFile() {
 }
 
 let cache = loadFile();
-let useMongo = false;
-let coll = null;
+let usePg = false;
+let pool = null;
 let writeChain = Promise.resolve();
 
-/* Conecta a MongoDB si hay MONGODB_URI. Debe llamarse (await) antes de usar la db. */
+/* Conecta a PostgreSQL si hay DATABASE_URL. Debe llamarse (await) antes de usar la db. */
 async function init() {
-  if (!MONGODB_URI) {
+  if (!DATABASE_URL) {
     console.log('• Almacenamiento: archivo local (data.json) — datos NO permanentes en hosting gratis');
     return;
   }
-  const { MongoClient } = await import('mongodb');
-  const client = new MongoClient(MONGODB_URI);
-  await client.connect();
-  coll = client.db(MONGODB_DB).collection('state');
-  const doc = await coll.findOne({ _id: 'singleton' });
-  if (doc && doc.data) {
-    cache = { ...structuredClone(empty), ...doc.data };
+  const pg = (await import('pg')).default;
+  pool = new pg.Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
+  await pool.query('CREATE TABLE IF NOT EXISTS app_state (id text PRIMARY KEY, data jsonb NOT NULL)');
+  const r = await pool.query("SELECT data FROM app_state WHERE id = 'singleton'");
+  if (r.rows.length && r.rows[0].data) {
+    cache = { ...structuredClone(empty), ...r.rows[0].data };
   } else {
-    await coll.updateOne({ _id: 'singleton' }, { $set: { data: cache } }, { upsert: true });
+    await pool.query(
+      "INSERT INTO app_state (id, data) VALUES ('singleton', $1) ON CONFLICT (id) DO NOTHING",
+      [JSON.stringify(cache)]
+    );
   }
-  useMongo = true;
-  console.log('✓ Almacenamiento: MongoDB (datos permanentes)');
+  usePg = true;
+  console.log('✓ Almacenamiento: PostgreSQL (Neon) — datos permanentes');
 }
 
 function persistFile() {
@@ -55,11 +57,14 @@ function persistFile() {
 }
 
 function persist() {
-  if (useMongo) {
-    const snapshot = structuredClone(cache);   // evita mutaciones durante el guardado async
+  if (usePg) {
+    const snapshot = JSON.stringify(cache);   // congela el estado para el guardado async
     writeChain = writeChain
-      .then(() => coll.updateOne({ _id: 'singleton' }, { $set: { data: snapshot } }, { upsert: true }))
-      .catch(err => console.error('⚠ Error guardando en MongoDB:', err.message));
+      .then(() => pool.query(
+        "INSERT INTO app_state (id, data) VALUES ('singleton', $1) ON CONFLICT (id) DO UPDATE SET data = $1",
+        [snapshot]
+      ))
+      .catch(err => console.error('⚠ Error guardando en PostgreSQL:', err.message));
     return;
   }
   persistFile();
